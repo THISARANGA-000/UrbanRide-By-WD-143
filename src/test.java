@@ -1,3 +1,5 @@
 public class test {
-    //tets
+    private String name;
+    private int ID;
+
 }
