@@ -1,0 +1,292 @@
+SE1020 - Object Oriented Programming
+UrbanRide Taxi and Cab Booking Platform
+Frontend Workload Distribution — HTML, CSS & Bootstrap
+Frontend Stack: HTML5  |  CSS3  |  Bootstrap 5  |  JavaScript (Vanilla)  |  Font Awesome Icons  |  jQuery (for
+AJAX calls to backend)
+Student ID Component Module No. of Pages
+1536 Component 01 User Management (Passenger) 4 pages
+2492 Component 02 Driver & Vehicle Management 4 pages
+2152 Component 03 Trip Booking & Dispatch 3 pages
+0642 Component 04 Admin Operations 3 pages
+1724 Component 05 Payment & Transaction Management 3 pages
+3705 Component 06 Rating & Feedback Management 3 pages
+Component 01 | Student ID: 1536 User Management (Passenger)
+register.html — Passenger Registration Page
+Page Elements
+• Bootstrap Navbar with UrbanRide logo
+• Registration form: Full Name, Email, Mobile, Password, Confirm Password
+• Home Address & Work Address input fields
+• Payment Method selector (Card / Cash / Wallet) using Bootstrap radio buttons
+• Submit button with Bootstrap btn-primary styling
+• Link to login page
+Bootstrap Classes Used
+. form-control
+. btn btn-primary
+. card shadow
+. container mt-5
+. row g-3
+login.html — Passenger Login Page
+Page Elements
+• Centered login card with UrbanRide branding
+• Email and Password input fields with Font Awesome icons
+• Remember Me checkbox
+• Social login buttons (Google, Facebook) using Bootstrap outline buttons
+• Forgot Password link
+• Register redirect link
+Bootstrap Classes Used
+. card p-4 shadow
+. input-group
+. btn btn-outline-danger
+. form-check
+. text-center
+profile.html — Profile Settings Page
+Page Elements
+• Profile picture upload with preview
+• Editable fields: Name, Email, Mobile, Addresses
+• Payment method management section
+• Change Password section with current/new/confirm fields
+• Save Changes button and Cancel button
+Bootstrap Classes Used
+. nav-tabs
+. tab-pane
+. form-floating
+. btn btn-success
+. alert alert-success
+passenger-directory.html — Admin View
+Page Elements
+• Search bar to filter passengers by ID or name
+• Bootstrap table listing all passengers with pagination
+• Action buttons: View, Edit, Delete per row
+• Badge indicators for Premium vs Regular passengers
+• Export to CSV button
+Bootstrap Classes Used
+. table table-striped table-hover
+. badge bg-warning
+. pagination
+. input-group mb-3
+. btn btn-sm
+Component 02 | Student ID: 2492 Driver & Vehicle Management
+driver-apply.html — Driver Application Form
+Page Elements
+• Multi-step form with Bootstrap progress bar (Step 1: Personal Info, Step 2:
+Vehicle Info, Step 3: Documents)
+• Personal: Name, NIC, License No., Mobile, Photo upload
+• Vehicle: Plate No., Model, Year, Type (Sedan/SUV/Van), Fuel Type
+• Document upload fields: License scan, Insurance scan
+• Next / Back / Submit navigation buttons
+Bootstrap Classes Used
+. progress
+. form-select
+. input-group
+. btn btn-warning
+. stepper component
+vehicle-dashboard.html — Vehicle Status Dashboard
+Page Elements
+• Summary cards: Total Vehicles, Active, On Trip, Under Maintenance
+• Filter by vehicle type dropdown and status filter
+• Vehicle cards with plate number, model, driver name, status badge
+• Color-coded status badges: green (Active), yellow (On Trip), red
+(Maintenance)
+• Quick action buttons per vehicle card
+Bootstrap Classes Used
+. card-deck
+. badge bg-success/warning/danger
+. dropdown-menu
+. row row-cols-3
+. card-body
+driver-edit.html — Driver Profile Edit Page
+Page Elements
+• Pre-filled editable form with driver's current data
+• Availability toggle switch (Online / Offline)
+• Vehicle assignment dropdown
+• Maintenance log entry section
+• Save and Cancel buttons
+Bootstrap Classes Used
+. form-switch
+. form-floating
+. btn btn-primary
+. list-group
+. modal for confirmation
+active-drivers.html — Active Drivers List
+Page Elements
+• Live table of active drivers with auto-refresh indicator
+• Columns: Driver ID, Name, Vehicle, Location, Status, Trips Today
+• Search and sort functionality
+• Click row to view driver details in a Bootstrap modal
+• Pagination controls
+Bootstrap Classes Used
+. table-responsive
+. modal modal-lg
+. spinner-border (live)
+. pagination
+. btn btn-info btn-sm
+Component 03 | Student ID: 2152 Trip Booking & Dispatch
+book-ride.html — Ride Request Page
+Page Elements
+• Embedded Google Maps iframe for pickup/dropoff selection
+• Pickup Location and Destination input fields with autocomplete
+• Vehicle type selector: Economy, Comfort, Luxury (Bootstrap card-based
+toggle)
+• Estimated fare display badge
+• Book Now button with loading spinner on submit
+Bootstrap Classes Used
+. card border-primary (selected)
+. badge bg-info
+. btn btn-lg btn-danger
+. spinner-border
+. input-group
+track-trip.html — Active Trip Tracking Screen
+Page Elements
+• Full-width map with driver location marker
+• Driver info card: Name, Photo, Rating, Vehicle, ETA
+• Trip status progress bar: Requested > Accepted > Arrived > In Progress >
+Completed
+• Cancel Ride button (disabled after driver arrives)
+• Call Driver button using Font Awesome phone icon
+Bootstrap Classes Used
+. progress-bar animated
+. card fixed-bottom
+. btn btn-outline-danger
+. badge bg-primary
+. d-flex align-items-center
+booking-history.html — Booking History List
+Page Elements
+• Filter tabs: All, Completed, Cancelled, In Progress
+• Booking cards with: Date, Route, Driver, Fare, Status badge
+• Re-book button on completed trips
+• Search by date range using Bootstrap date input
+• Pagination for long history lists
+Bootstrap Classes Used
+. nav nav-pills
+. list-group-item
+. badge bg-success/danger
+. btn btn-sm btn-outline-primary
+. pagination
+Component 04 | Student ID: 0642 Admin Operations
+admin-dashboard.html — Main Admin Dashboard
+Page Elements
+• Sidebar navigation: Dashboard, Drivers, Passengers, Bookings, Payments,
+Reports
+• KPI summary cards: Total Trips, Revenue Today, Active Drivers, New
+Passengers
+• Line chart (Chart.js): Daily trips over last 30 days
+• Pie chart: Revenue by payment method
+• Recent bookings table with quick status view
+Bootstrap Classes Used
+. sidebar with nav-pills
+. card text-white
+bg-primary/success/warning
+. table table-sm
+. row g-4
+. d-flex
+fare-management.html — Fare Management Panel
+Page Elements
+• Current fare settings table: Vehicle Type, Base Fare, Per KM Rate, Surge
+Multiplier
+• Inline editable fields for each fare row
+• Save Changes button per row
+• Surge pricing toggle switch with active hours selector
+• Fare change history log section
+Bootstrap Classes Used
+. table table-bordered
+. form-switch
+. btn btn-warning btn-sm
+. list-group
+. form-control form-control-sm
+audit-logs.html — System Audit Logs
+Page Elements
+• Date range filter and admin user filter dropdowns
+• Log table: Timestamp, Admin ID, Action, Affected Record
+• Color-coded rows: red (Delete), yellow (Update), green (Create)
+• Export logs to CSV button
+• Pagination with items-per-page selector
+Bootstrap Classes Used
+. table-striped table-sm
+. badge bg-danger/warning/success
+. btn btn-outline-secondary
+. form-select
+. pagination
+Component 05 | Student ID: 1724 Payment & Transaction Management
+payment-select.html — Payment Selection Page
+Page Elements
+• Trip summary card: Route, Distance, Fare Breakdown (Base + KM + Surge)
+• Payment method radio cards: Cash, Card, Wallet
+• Card details form (shown conditionally): Card No., Expiry, CVV
+• Wallet balance display with Top-up link
+• Confirm Payment button with total fare badge
+Bootstrap Classes Used
+. card border (selected
+highlight)
+. collapse (for card form)
+. badge bg-success
+. form-check-input
+. btn btn-lg btn-success
+receipt.html — Digital Receipt View
+Page Elements
+• UrbanRide branded receipt layout
+• Trip details: Date, Booking ID, Route, Driver, Distance
+• Fare breakdown table: Base Fare, Distance Charge, Surge, Total
+• Payment method used and transaction reference
+• Download as PDF button and Share Receipt button
+Bootstrap Classes Used
+. card shadow p-4
+. table table-borderless
+. btn btn-outline-dark
+. text-end fw-bold
+. hr
+wallet-topup.html — Wallet Top-up Page
+Page Elements
+• Current wallet balance display with progress bar
+• Quick top-up amount buttons: LKR 500, 1000, 2000, 5000
+• Custom amount input field
+• Payment gateway card form
+• Transaction history list for wallet credits
+Bootstrap Classes Used
+. progress-bar bg-info
+. btn-group (amount selector)
+. list-group-item d-flex
+. form-control
+. btn btn-primary
+Component 06 | Student ID: 3705 Rating & Feedback Management
+rate-ride.html — Post-Ride Rating Popup
+Page Elements
+• Bootstrap Modal triggered after trip completion
+• Driver photo and name display
+• Star rating selector (1-5) using Font Awesome star icons with JS toggle
+• Optional written comment textarea
+• Quick tag buttons: Friendly, Safe Driver, On Time, Clean Car
+• Submit Rating and Skip buttons
+Bootstrap Classes Used
+. modal modal-dialog-centered
+. btn-group (tags)
+. textarea form-control
+. btn btn-warning (Submit)
+. fa-star icons
+feedback-summary.html — User Feedback Summary Page
+Page Elements
+• Overall rating display: large star score with total reviews count
+• Rating breakdown bar chart: 5-star to 1-star percentages
+• Filter tabs: All Reviews, Positive (4-5), Negative (1-2)
+• Individual review cards: Reviewer name, Stars, Comment, Date
+• Pagination for review list
+Bootstrap Classes Used
+. progress-bar (per star %)
+. nav nav-tabs
+. card mb-3
+. badge bg-warning text-dark
+. pagination
+moderation.html — Admin Moderation Panel
+Page Elements
+• Reported reviews table: Review ID, Reporter, Reviewee, Reason, Date
+• Review content preview in expandable row
+• Action buttons per report: Approve (keep), Remove Review, Warn User
+• Filter by status: Pending, Resolved, Dismissed
+• Bulk action checkbox with Apply button
+Bootstrap Classes Used
+. table table-hover
+. collapse (preview)
+. btn btn-sm
+btn-success/danger/warning
+. form-select (filter)
+. form-check (bulk)
+SE1020 Object Oriented Programming — UrbanRide Project | Frontend: HTML, CSS & Bootstrap 5

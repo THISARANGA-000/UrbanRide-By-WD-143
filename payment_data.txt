@@ -1,0 +1,23 @@
+=== Payment Data Log ===
+[2026-05-11 01:26:51] Driver ID: D032 | Passenger ID: P032 | Booking ID: B085 | Fare: LKR 1700.00 | Payment Method: Visa | Status: Paid
+[2026-05-12 23:06:57] Driver ID: D096 | Passenger ID: P002 | Booking ID: B009 | Fare: LKR 1260.00 | Payment Method: Cash | Status: Paid
+[2026-05-12 23:13:48] Driver ID: D096 | Passenger ID: P002 | Booking ID: B010 | Fare: LKR 1260.00 | Payment Method: Wallet | Status: Paid
+[2026-05-12 23:25:20] Driver ID: D096 | Passenger ID: P002 | Booking ID: B011 | Fare: LKR 4140.00 | Payment Method: Visa | Status: Paid
+[2026-05-12 23:31:14] Driver ID: D096 | Passenger ID: P096 | Booking ID: B041 | Fare: LKR 1740.00 | Payment Method: Cash | Status: Paid
+[2026-05-12 23:42:40] Driver ID: D096 | Passenger ID: P002 | Booking ID: B073 | Fare: LKR 5100.00 | Payment Method: Visa | Status: Paid
+[2026-05-13 00:39:50] Driver ID: D032 | Passenger ID: P002 | Booking ID: B007 | Fare: LKR 1300.00 | Payment Method: Wallet | Status: Paid
+[2026-05-13 00:39:58] Driver ID: D032 | Passenger ID: P002 | Booking ID: B007 | Fare: LKR 1300.00 | Payment Method: Wallet | Status: Paid
+[2026-05-13 13:52:28] Driver ID: D032 | Passenger ID: P000 | Booking ID: B071 | Fare: LKR 580.00 | Payment Method: Wallet | Status: Paid
+[2026-05-13 14:13:50] Driver ID: D032 | Passenger ID: P000 | Booking ID: B001 | Fare: LKR 1700.00 | Payment Method: Visa | Status: Paid
+[2026-05-13 14:26:31] Driver ID: D032 | Passenger ID: P000 | Booking ID: B002 | Fare: LKR 300.00 | Payment Method: Wallet | Status: Paid
+[2026-05-13 20:11:22] Driver ID: D000 | Passenger ID: P000 | Booking ID: B033 | Fare: LKR 2100.00 | Payment Method: Wallet | Status: Paid
+[2026-05-13 20:19:53] Driver ID: D000 | Passenger ID: P000 | Booking ID: B034 | Fare: LKR 1740.00 | Payment Method: Cash | Status: Paid
+[2026-05-13 22:53:15] Driver ID: D033 | Passenger ID: P000 | Booking ID: B035 | Fare: LKR 1270.00 | Payment Method: Wallet | Status: Paid
+[2026-05-13 23:01:01] Driver ID: D034 | Passenger ID: P000 | Booking ID: B036 | Fare: LKR 740.00 | Payment Method: Wallet | Status: Paid
+[2026-05-15 21:31:19] Driver ID: D067 | Passenger ID: P100 | Booking ID: B870 | Fare: LKR 2100.00 | Payment Method: Cash | Status: Paid
+[2026-05-15 21:39:42] Driver ID: D067 | Passenger ID: P100 | Booking ID: B902 | Fare: LKR 2100.00 | Payment Method: Wallet | Status: Paid
+[2026-05-15 21:44:52] Driver ID: D067 | Passenger ID: P100 | Booking ID: B903 | Fare: LKR 540.00 | Payment Method: Cash | Status: Paid
+[2026-05-15 21:58:00] Driver ID: D067 | Passenger ID: P100 | Booking ID: B904 | Fare: LKR 2100.00 | Payment Method: Cash | Status: Paid
+[2026-05-15 22:07:00] Driver ID: D067 | Passenger ID: P100 | Booking ID: B905 | Fare: LKR 540.00 | Payment Method: Cash | Status: Paid
+[2026-05-15 22:17:09] Driver ID: D067 | Passenger ID: P100 | Booking ID: B906 | Fare: LKR 2220.00 | Payment Method: Cash | Status: Paid
+[2026-05-15 22:24:00] Driver ID: D067 | Passenger ID: P100 | Booking ID: B907 | Fare: LKR 1740.00 | Payment Method: Cash | Status: Paid

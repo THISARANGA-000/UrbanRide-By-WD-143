@@ -1,0 +1,78 @@
+=== UrbanRide Driver Registry ===
+[2026-05-07 12:30:30] ID: D000 | Name: admin | Vehicle: honda bike (Bike) | Email: admin@gmail.com
+[2026-05-09 10:02:19] NEW DRIVER REGISTRATION
+   - ID: D001
+   - Name: Car driver
+   - Email: testcar@gmail.com
+   - Vehicle: honda vessol (Car)
+   - Plate: bbg5560
+   - Status: Approved
+--------------------------------------------------
+[2026-05-09 12:55:14] NEW DRIVER REGISTRATION
+   - ID: D002
+   - Name: Test Driver
+   - Email: testdriver@example.com
+   - Vehicle: Suzuki Alto (Car)
+   - Plate: CAD-1234
+   - Status: Approved
+--------------------------------------------------
+[2026-05-13 19:11:22] NEW DRIVER REGISTRATION
+   - ID: D000
+   - Name: Car driver 
+   - Email: cardriver@gmail.com
+   - Mobile: 0456078923
+   - NIC: 20046052353
+   - Vehicle: Honda Vessol (Car)
+   - Plate: ABA-2512
+   - Status: Pending Approval
+--------------------------------------------------
+[2026-05-13 22:49:35] NEW DRIVER REGISTRATION
+   - ID: D033
+   - Name: tuk tuk
+   - Email: tuktukdriver@gmail.com
+   - Mobile: 0771020136
+   - NIC: 2046620620
+   - Vehicle: BAJAJ WHEEL (Three-Wheel)
+   - Plate: AG-2134
+   - Status: Pending Approval
+--------------------------------------------------
+[2026-05-13 22:58:52] NEW DRIVER REGISTRATION
+   - ID: D034
+   - Name: bike driver
+   - Email: bikedriver@gmail.com
+   - Mobile: 07562868919
+   - NIC: 002045662600
+   - Vehicle: ct 100 (Bike)
+   - Plate: AB-4521
+   - Status: Pending Approval
+--------------------------------------------------
+[2026-05-14 22:53:56] NEW DRIVER REGISTRATION
+   - ID: D064
+   - Name: tharuka
+   - Email: kavishkanethsara258@gmail.com
+   - Mobile: 354+15+7
+   - NIC: 34454
+   - Vehicle: toyota  (Car)
+   - Plate: 111qq
+   - Status: Pending Approval
+--------------------------------------------------
+[2026-05-15 00:31:03] NEW DRIVER REGISTRATION
+   - ID: D066
+   - Name: tharuka
+   - Email: kavishkanethsara28@gmail.com
+   - Mobile: 1212122
+   - NIC: 222222222
+   - Vehicle: car (Car)
+   - Plate: ww222
+   - Status: Pending Approval
+--------------------------------------------------
+[2026-05-15 21:25:05] NEW DRIVER REGISTRATION
+   - ID: D067
+   - Name: mak
+   - Email: mak@lk
+   - Mobile: 1111
+   - NIC: 2002002002
+   - Vehicle: Hyndai ioniq n (Car)
+   - Plate: AA 2233
+   - Status: Pending Approval
+--------------------------------------------------

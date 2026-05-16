@@ -1,0 +1,15 @@
+com\urbanride\UrbanRideApplication.class
+com\urbanride\component4\Admin.class
+com\urbanride\component1\User.class
+com\urbanride\component3\BookingController.class
+com\urbanride\component3\BookingRepository.class
+com\urbanride\component1\Passenger.class
+com\urbanride\component6\FeedbackManager.class
+com\urbanride\component1\UserController.class
+com\urbanride\component1\PassengerRepository.class
+com\urbanride\component3\Booking.class
+com\urbanride\component2\Vehicle.class
+com\urbanride\component5\PaymentManager.class
+com\urbanride\component2\DriverController.class
+com\urbanride\component2\DriverRepository.class
+com\urbanride\component2\Driver.class
