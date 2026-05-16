@@ -1,0 +1,5 @@
+[2026-05-12 02:03:09] New Admin: ID A000 | Name: admin new | Email: manager@gmail.com | Role: Manager
+[2026-05-13 00:05:16] New Admin: ID A001 | Name: analyser | Email: testanalyser@gmail.com | Role: Analyst
+[2026-05-13 01:00:07] New Admin: ID A002 | Name: eqmanerger | Email: admin321@gmail.com | Role: Manager
+[2026-05-14 23:07:25] New Admin: ID A000 | Name: kavishka nethsara | Email: kavishkanethsara258@gmail.com | Role: Manager
+[2026-05-15 00:34:14] New Admin: ID A001 | Name: kamal | Email: kavishkanethsara28@gmail.com | Role: Manager

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Trip | UrbanRide</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .pulse-text { animation: pulseText 2s infinite; }
+        @keyframes pulseText { 0% { opacity: 0.6; } 50% { opacity: 1; text-shadow: 0 0 10px rgba(5,150,105,0.5); } 100% { opacity: 0.6; } }
+    </style>
+</head>
+<body class="m-0 p-0 overflow-hidden">
+    <!-- Full Screen Map -->
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126743.58585966601!2d79.77380313175114!3d6.921838634863953!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo%2C%20Sri%20Lanka!5e0!3m2!1sen!2sus!4v1714890283021!5m2!1sen!2sus" width="100%" height="100vh" style="border:0; position: absolute; inset: 0;" allowfullscreen="" loading="lazy"></iframe>
+
+    <!-- Floating Top Bar -->
+    <div class="position-absolute top-0 start-0 w-100 p-4 z-1 d-flex justify-content-between align-items-center">
+        <a href="book-ride.html" class="btn btn-white shadow border rounded-circle bg-white" style="width: 50px; height: 50px; line-height: 35px;"><i class="fa-solid fa-arrow-left text-dark"></i></a>
+        <div class="bg-white py-2 px-4 rounded-pill border shadow-sm">
+            <span class="text-dark fw-bold">Booking <span class="text-primary">#<span id="bookingIdDisplay">...</span></span></span>
+        </div>
+    </div>
+
+    <!-- Floating Driver Card (Bottom) -->
+    <div class="position-absolute bottom-0 start-0 w-100 p-4 z-1 d-flex justify-content-center pb-5">
+        <div class="classic-card shadow-lg border w-100 bg-white" style="max-width: 600px; padding: 2rem;">
+            
+            <!-- Status Bar -->
+            <div class="mb-4">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-dark fw-bold">Status</span>
+                    <span class="text-primary fw-bold pulse-text" id="tripStatusText">Waiting for Driver...</span>
+                </div>
+                <div class="progress rounded-pill overflow-hidden bg-light" style="height: 10px; border: 1px solid #E5E7EB;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" id="tripProgressBar" role="progressbar" style="width: 10%"></div>
+                </div>
+            </div>
+
+            <!-- Driver Info -->
+            <div class="d-flex align-items-center mb-4 p-3 bg-light rounded-4 border" id="driverInfoCard">
+                <div class="rounded-circle bg-white me-3 border border-2 border-primary shadow-sm" style="width: 70px; height: 70px; overflow: hidden; padding: 2px;">
+                    <img src="https://ui-avatars.com/api/?name=Driver&background=F59E0B&color=fff" class="w-100 h-100 object-fit-cover rounded-circle" id="driverAvatar" alt="Driver">
+                </div>
+                <div class="flex-grow-1">
+                    <h4 class="mb-0 fw-bold text-dark" id="driverName">Searching...</h4>
+                    <div class="text-dark small"><span class="badge bg-secondary me-2" id="driverPlate">...</span> <span id="vehicleDisplay">...</span></div>
+                </div>
+                <div class="text-end border-start border-secondary ps-3">
+                    <div class="fs-2 fw-bold text-dark" id="etaDisplay">--<span class="fs-6">min</span></div>
+                    <div class="text-muted small fw-bold">ETA</div>
+                </div>
+            </div>
+
+            <!-- Route Details -->
+            <div class="bg-light rounded-4 p-3 mb-4 border d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="small fw-bold text-muted mb-1 text-uppercase">Distance</div>
+                    <h5 class="fw-bold mb-0 text-dark"><span id="distDisplay">0</span> km</h5>
+                </div>
+                <div class="text-center px-3 border-start border-end">
+                    <div class="small fw-bold text-muted mb-1 text-uppercase">Vehicle</div>
+                    <h5 class="fw-bold mb-0 text-primary" id="vehicleTypeDisplay">...</h5>
+                </div>
+                <div class="text-end">
+                    <div class="small fw-bold text-muted mb-1 text-uppercase">Total Fare</div>
+                    <h5 class="fw-bold mb-0 text-success" id="fareDisplay">LKR 0</h5>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-3">
+                <button class="btn btn-outline-danger w-100 py-3 fw-bold rounded-pill shadow-sm" id="cancelBtn"><i class="fa-solid fa-xmark me-2"></i> Cancel Ride</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookingIdStr = urlParams.get('id') || "0";
+            const bookingId = bookingIdStr.replace('B', ''); // database id
+            const displayId = 'B' + String(parseInt(bookingId)).padStart(3, '0');
+            const type = urlParams.get('type') || "Bike";
+            
+            $('#bookingIdDisplay').text(displayId);
+            $('#vehicleTypeDisplay').text(type);
+            $('#distDisplay').text(localStorage.getItem('last_dist') || "0");
+            $('#fareDisplay').text(localStorage.getItem('last_fare') || "LKR 0");
+
+            let pollingInterval = setInterval(checkStatus, 1000);
+            let realBookingId = null;
+
+            function checkStatus() {
+                $.get(`/api/bookings/all`, function(bookings) {
+                    const booking = bookings.find(b => b.bookingId == bookingId);
+                    if (!booking) return;
+
+                    realBookingId = booking.bookingId;
+
+                    // Update UI with real data from server if localStorage is missing
+                    if (booking.fare) $('#fareDisplay').text('LKR ' + booking.fare.toLocaleString());
+                    if (booking.rideType) $('#vehicleTypeDisplay').text(booking.rideType);
+
+                    const status = booking.status;
+                    $('#tripStatusText').text(status);
+
+                    if (booking.driverId && booking.driverId > 0) {
+                        // Fetch Real Driver Details
+                        $.get(`/api/drivers/${booking.driverId}`, function(d) {
+                            $('#driverName').text(d.name);
+                            $('#driverPlate').text(d.vehiclePlate);
+                            $('#vehicleDisplay').text(d.vehicleModel);
+                            $('#driverAvatar').attr('src', `https://ui-avatars.com/api/?name=${encodeURIComponent(d.name)}&background=F59E0B&color=fff`);
+                            
+                            if (status === 'Accepted' || status === 'Arrived') {
+                                $('#etaDisplay').html(`5<span class="fs-6">min</span>`);
+                            } else if (status === 'In Progress') {
+                                $('#etaDisplay').html(`--<span class="fs-6">min</span>`);
+                            } else {
+                                $('#etaDisplay').html(`0<span class="fs-6">min</span>`);
+                            }
+                        });
+                    }
+
+                    if (status === 'Accepted') {
+                        $('#tripStatusText').text('Driver Accepted! On the way...').removeClass('text-info text-success text-primary').addClass('text-primary');
+                        $('#tripProgressBar').css('width', '30%').removeClass('bg-info bg-success').addClass('bg-primary');
+                    } 
+                    else if (status === 'Arrived') {
+                        $('#tripStatusText').text('Driver has Arrived!').removeClass('text-success text-primary').addClass('text-info');
+                        $('#tripProgressBar').css('width', '50%').removeClass('bg-primary bg-success').addClass('bg-info');
+                    }
+                    else if (status === 'In Progress') {
+                        $('#tripStatusText').text('Trip in Progress... Enjoy your ride!').removeClass('text-info text-primary').addClass('text-success');
+                        $('#tripProgressBar').css('width', '80%').removeClass('bg-info bg-primary').addClass('bg-success');
+                    }
+                    else if (status === 'Completed' || status === 'Paid') {
+                        $('#tripStatusText').text('Trip Completed! Redirecting to Payment...').removeClass('text-info text-primary').addClass('text-success');
+                        $('#tripProgressBar').css('width', '100%').removeClass('bg-info bg-primary').addClass('bg-success');
+                        clearInterval(pollingInterval);
+                        setTimeout(() => {
+                            window.location.href = `payment-select.html?bookingId=${booking.bookingId}&fare=${booking.fare}&driverId=${booking.driverId}`;
+                        }, 2000);
+                    }
+                    else if (status === 'Cancelled') {
+                        alert("Your ride was cancelled.");
+                        window.location.href = "profile.html";
+                    }
+                });
+            }
+
+            $('#cancelBtn').click(function() {
+                if(!realBookingId) { alert("Please wait for trip details to load."); return; }
+                if(confirm("Are you sure you want to cancel?")) {
+                    $.ajax({
+                        url: `/api/bookings/${realBookingId}/status`,
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ status: 'Cancelled' }),
+                        success: function() {
+                            window.location.href = "profile.html";
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
