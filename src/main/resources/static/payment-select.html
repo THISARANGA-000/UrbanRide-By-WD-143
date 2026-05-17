@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment | UrbanRide</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background-color: #F3F4F6;
+            min-height: 100vh;
+        }
+        .payment-option {
+            background: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .payment-option:hover {
+            background: #F9FAFB;
+            transform: translateX(5px);
+        }
+        .payment-option input[type="radio"]:checked + .option-content {
+            border-color: var(--primary);
+            background: #FEF3C7;
+        }
+    </style>
+</head>
+<body class="pt-5 d-flex align-items-center">
+    
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="text-center mb-4">
+                    <h1 class="urbanride-logo mb-2 text-dark">UrbanRide</h1>
+                    <p class="text-muted fs-5 fw-light">Complete your payment securely</p>
+                </div>
+
+                <div class="classic-card shadow-sm mb-4 border">
+                    <h4 class="border-bottom pb-3 mb-3 fw-bold text-dark"><i class="fa-solid fa-receipt me-2 text-primary"></i>Trip Summary</h4>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted fw-bold">Route</span>
+                        <span class="text-dark" id="summaryRoute">Colombo 03 <i class="fa-solid fa-arrow-right mx-1 text-muted"></i> Dehiwala</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted fw-bold">Distance</span>
+                        <span class="text-dark" id="summaryDist">5.2 km</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted fw-bold">Duration</span>
+                        <span class="text-dark" id="summaryDuration">18 mins</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-end mt-4 pt-3 border-top">
+                        <span class="text-muted text-uppercase fw-bold">Total Fare</span>
+                        <span class="text-success fs-2 fw-bold" id="totalFareDisplay">LKR 0.00</span>
+                    </div>
+                </div>
+
+                <div class="classic-card shadow-sm border">
+                    <h5 class="mb-4 fw-bold text-dark">Select Payment Method</h5>
+                    
+                    <div class="list-group list-group-flush bg-transparent border-0 gap-3">
+                        
+                        <!-- Card Payment -->
+                        <label class="payment-option p-0 rounded-4 overflow-hidden position-relative border">
+                            <input class="form-check-input position-absolute opacity-0" type="radio" name="paymentMethod" value="Visa" checked onchange="toggleCardForm(true)">
+                            <div class="option-content p-3 d-flex align-items-center w-100 transition-all border rounded-4 border-transparent">
+                                <i class="fa-regular fa-credit-card fs-3 text-primary mx-3"></i>
+                                <span class="fs-5 fw-bold text-dark">Credit / Debit Card</span>
+                                <i class="fa-solid fa-circle-check ms-auto fs-4 text-primary check-icon" style="opacity: 0; transition: 0.3s;"></i>
+                            </div>
+                        </label>
+                        
+                        <!-- Card Form Content -->
+                        <div id="cardForm" class="p-4 mt-2 mb-2 bg-light rounded-4 border">
+                            <div class="mb-3">
+                                <label class="form-label small text-muted fw-bold text-uppercase">Card Number</label>
+                                <div class="input-group shadow-sm rounded-3 overflow-hidden">
+                                    <span class="input-group-text border-0 bg-white"><i class="fa-brands fa-cc-visa text-primary"></i></span>
+                                    <input type="text" class="form-control border-0 bg-white text-dark" placeholder="0000 0000 0000 0000">
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <label class="form-label small text-muted fw-bold text-uppercase">Expiry</label>
+                                    <input type="text" class="form-control border-0 bg-white text-dark shadow-sm" placeholder="MM/YY">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small text-muted fw-bold text-uppercase">CVV</label>
+                                    <input type="text" class="form-control border-0 bg-white text-dark shadow-sm" placeholder="123">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Wallet Payment -->
+                        <label class="payment-option p-0 rounded-4 overflow-hidden position-relative border">
+                            <input class="form-check-input position-absolute opacity-0" type="radio" name="paymentMethod" value="Wallet" onchange="toggleCardForm(false)">
+                            <div class="option-content p-3 d-flex align-items-center w-100 transition-all border rounded-4 border-transparent">
+                                <i class="fa-solid fa-wallet fs-3 text-info mx-3"></i>
+                                <div>
+                                    <span class="fs-5 fw-bold d-block text-dark">UrbanRide Wallet</span>
+                                    <span class="small text-muted fw-bold" id="walletBalanceDisplay">Balance: LKR 0.00</span>
+                                </div>
+                                <i class="fa-solid fa-circle-check ms-auto fs-4 text-info check-icon" style="opacity: 0; transition: 0.3s;"></i>
+                            </div>
+                        </label>
+
+                        <!-- Cash Payment -->
+                        <label class="payment-option p-0 rounded-4 overflow-hidden position-relative border">
+                            <input class="form-check-input position-absolute opacity-0" type="radio" name="paymentMethod" value="Cash" onchange="toggleCardForm(false)">
+                            <div class="option-content p-3 d-flex align-items-center w-100 transition-all border rounded-4 border-transparent">
+                                <i class="fa-solid fa-money-bill-wave fs-3 text-success mx-3"></i>
+                                <span class="fs-5 fw-bold text-dark">Pay with Cash</span>
+                                <i class="fa-solid fa-circle-check ms-auto fs-4 text-success check-icon" style="opacity: 0; transition: 0.3s;"></i>
+                            </div>
+                        </label>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg w-100 mt-4 py-3 fw-bold shadow-sm" id="confirmPaymentBtn">Confirm Payment <i class="fa-solid fa-lock ms-2"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        input[type="radio"]:checked + .option-content .check-icon { opacity: 1 !important; }
+        .border-transparent { border-color: transparent !important; }
+        input[type="radio"]:checked + .option-content { border-color: var(--primary) !important; }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Get data from localStorage
+            const pickup = localStorage.getItem('last_pickup') || "Colombo 03";
+            const destination = localStorage.getItem('last_destination') || "Dehiwala";
+            const dist = localStorage.getItem('last_dist') || "5.2";
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const rawFare = urlParams.get('fare');
+            const displayFare = rawFare ? `LKR ${parseFloat(rawFare).toLocaleString()}` : (localStorage.getItem('last_fare') || "LKR 0");
+            
+            $('#summaryRoute').html(`${pickup} <i class="fa-solid fa-arrow-right mx-1 text-muted"></i> ${destination}`);
+            $('#summaryDist').text(dist + ' km');
+            $('#summaryDuration').text(Math.round(dist * 2.5) + ' mins');
+            $('#totalFareDisplay').text(displayFare);
+            localStorage.setItem('last_fare', displayFare);
+
+            const userId = localStorage.getItem('urbanride_userId');
+            let userBalance = 0;
+            const fareValue = parseFloat(rawFare || localStorage.getItem('last_fare')?.replace(/[^\d.]/g, '') || "0");
+
+            if (userId) {
+                $.get(`/api/users/${userId}`, function(user) {
+                    userBalance = user.walletBalance || 0;
+                    $('#walletBalanceDisplay').text('Balance: LKR ' + userBalance.toLocaleString());
+                    
+                    // Disable Wallet option if balance is insufficient
+                    if (userBalance < fareValue) {
+                        const walletInput = $('input[name="paymentMethod"][value="Wallet"]');
+                        walletInput.prop('disabled', true);
+                        walletInput.closest('.payment-option').css('opacity', '0.5').css('cursor', 'not-allowed');
+                        $('#walletBalanceDisplay').append(' <span class="text-danger small ms-2">(Insufficient Funds)</span>');
+                    }
+                });
+            }
+
+            $('#confirmPaymentBtn').click(function() {
+                const method = $('input[name="paymentMethod"]:checked').val();
+                if (!method) { alert("Please select a payment method."); return; }
+
+                const btn = $(this);
+                btn.html('<i class="fa-solid fa-spinner fa-spin"></i> Processing...').prop('disabled', true);
+                
+                const urlParams = new URLSearchParams(window.location.search);
+                const driverId = urlParams.get('driverId') || "";
+
+                if (method === 'Wallet') {
+                    // We now let the server handle wallet deduction for better security/reliability
+                    finalizePayment(driverId);
+                } else {
+                    // MOCK SUCCESS FOR OTHER METHODS
+                    setTimeout(() => {
+                        finalizePayment(driverId);
+                    }, 1500);
+                }
+            });
+
+            function finalizePayment(driverId) {
+                const method = $('input[name="paymentMethod"]:checked').val();
+                const urlParams = new URLSearchParams(window.location.search);
+                const bookingId = urlParams.get('bookingId');
+
+                // ✅ UPDATE BOOKING ON SERVER WITH PAYMENT METHOD (Issue 13)
+                if (bookingId) {
+                    $.ajax({
+                        url: `/api/bookings/${bookingId}/status`,
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ 
+                            status: 'Paid', 
+                            paymentMethod: method 
+                        }),
+                        success: function() {
+                            $('#confirmPaymentBtn').removeClass('btn-primary').addClass('btn-success').html('<i class="fa-solid fa-check"></i> Success');
+                            setTimeout(() => {
+                                window.location.href = `rate-ride.html?bookingId=${bookingId}&driverId=${driverId}`;
+                            }, 1000);
+                        },
+                        error: function(xhr) {
+                            const msg = xhr.responseJSON?.error || "Payment failed. Please try again.";
+                            alert(msg);
+                            $('#confirmPaymentBtn').prop('disabled', false).html('Confirm Payment <i class="fa-solid fa-lock ms-2"></i>');
+                        }
+                    });
+                } else {
+                    // Fallback for missing bookingId
+                    window.location.href = "profile.html";
+                }
+            }
+        });
+
+        function toggleCardForm(show) {
+            if(show) $('#cardForm').slideDown();
+            else $('#cardForm').slideUp();
+        }
+    </script>
+</body>
+</html>
