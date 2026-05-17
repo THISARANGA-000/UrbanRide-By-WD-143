@@ -1,0 +1,894 @@
+SE1020 — Object Oriented Programming
+UrbanRide Taxi & Cab Booking Platform
+Complete Java OOP Source Code — All 6 Components
+Student
+ID
+Component Module Classes
+3705 Component 01 User Management User, Passenger, PremiumPassenger, RegularPassenger
+2492 Component 02 Driver & Vehicle Driver, Vehicle, ElectricVehicle, GasolineVehicle
+2152 Component 03 Trip Booking Booking, Trip, FareCalculator, EconomyFare, LuxuryFare, ComfortFare
+0642 Component 04 Admin Operations Admin, SuperAdmin, SystemLog, SystemSettings
+1724 Component 05 Payments Payment, CardPayment, CashPayment, WalletPayment, Receipt
+1536 Component 06 Rating & Feedback Feedback, DriverFeedback, PassengerFeedback, RatingSummary
+Component 01 — Student 3705 User Management (Passenger)
+class User extends (Abstract Base Class)
+public abstract class User {
+        // ■■ Private Attributes (Encapsulation) ■■
+        private int userId;
+        private String name;
+        private String email;
+        private String passwordHash;
+        private String mobile;
+        private String role;
+        private String createdAt;
+ 
+        // ■■ Constructor ■■
+        public User(int userId, String name, String email, String passwordHash, String mobile,
+String role) {
+                this.userId = userId;
+                this.name = name;
+                this.email = email;
+                this.passwordHash = passwordHash;
+                this.mobile = mobile;
+                this.role = role;
+        }
+ 
+        // ■■ Getters & Setters ■■
+        public int getUserId() { return userId; }
+        public void setUserId(int userId) { this.userId = userId; }
+        public String getName() { return name; }
+        public void setName(String name) { this.name = name; }
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
+        public String getMobile() { return mobile; }
+        public void setMobile(String mobile) { this.mobile = mobile; }
+        public String getRole() { return role; }
+        public String getCreatedAt() { return createdAt; }
+        public void setCreatedAt(String date) { this.createdAt = date; }
+ 
+        // ■■ Abstract Methods (Polymorphism) ■■
+        public abstract boolean login(String email, String password);
+        public abstract void displayProfile();
+ 
+        // ■■ Utility ■■
+        protected String hashPassword(String password) {
+                // Simple hash simulation
+                return Integer.toHexString(password.hashCode());
+        }
+}
+class Passenger extends User
+import java.io.*;
+import java.util.*;
+ 
+public class Passenger extends User {
+        // ■■ Private Attributes ■■
+        private String homeAddress;
+        private String workAddress;
+        private String paymentMethod; // 'Card', 'Cash', 'Wallet'
+        private double walletBalance;
+        private String passengerType; // 'Regular' or 'Premium'
+        private List bookingHistory;
+ 
+        // ■■ Constructor ■■
+        public Passenger(int userId, String name, String email, String password, String mobile) {
+                super(userId, name, email, password, mobile, "passenger");
+                this.walletBalance = 0.0;
+                this.passengerType = "Regular";
+                this.bookingHistory = new ArrayList<>();
+        }
+ 
+        // ■■ Getters & Setters ■■
+        public String getHomeAddress() { return homeAddress; }
+        public void setHomeAddress(String addr) { this.homeAddress = addr; }
+        public String getWorkAddress() { return workAddress; }
+        public void setWorkAddress(String addr) { this.workAddress = addr; }
+        public String getPaymentMethod() { return paymentMethod; }
+        public void setPaymentMethod(String method) { this.paymentMethod = method; }
+        public double getWalletBalance() { return walletBalance; }
+        public void setWalletBalance(double bal) { this.walletBalance = bal; }
+        public String getPassengerType() { return passengerType; }
+        public void setPassengerType(String type) { this.passengerType = type; }
+ 
+        // ■■ Methods ■■
+        public void topUpWallet(double amount) {
+                this.walletBalance += amount;
+                System.out.println("Wallet topped up. New balance: " + walletBalance);
+        }
+ 
+        public void addBooking(String bookingId) {
+                bookingHistory.add(bookingId);
+        }
+ 
+        public void viewBookingHistory() {
+                System.out.println("Booking history for " + getName() + ":");
+                for (String b : bookingHistory) System.out.println(" - " + b);
+        }
+ 
+        // ■■ Save to text file ■■
+        public void saveToFile() throws IOException {
+                FileWriter fw = new FileWriter("passengers.txt", true);
+                fw.write(getUserId() + "," + getName() + "," + getEmail() + ","
+                              + getMobile() + "," + passengerType + "\n");
+                fw.close();
+        }
+ 
+        // ■■ Load all passengers from file ■■
+        public static List loadFromFile() throws IOException {
+                List list = new ArrayList<>();
+                BufferedReader br = new BufferedReader(new FileReader("passengers.txt"));
+                String line;
+                while ((line = br.readLine()) != null) {
+                        String[] parts = line.split(",");
+                        if (parts.length >= 5) {
+                                Passenger p = new Passenger(Integer.parseInt(parts[0]),
+                                        parts[1], parts[2], "", parts[3]);
+                                p.setPassengerType(parts[4]);
+                                list.add(p);
+                        }
+                }
+                br.close();
+                return list;
+        }
+ 
+        @Override
+        public boolean login(String email, String password) {
+                return this.getEmail().equals(email)
+                        && hashPassword(password).equals(this.getMobile()); // simplified check
+        }
+ 
+        @Override
+        public void displayProfile() {
+                System.out.println("=== Passenger Profile ===");
+                System.out.println("ID : " + getUserId());
+                System.out.println("Name : " + getName());
+                System.out.println("Email : " + getEmail());
+                System.out.println("Mobile : " + getMobile());
+                System.out.println("Type : " + passengerType);
+                System.out.println("Wallet : LKR " + walletBalance);
+        }
+}
+class PremiumPassenger extends Passenger
+public class PremiumPassenger extends Passenger {
+        // ■■ Private Attributes ■■
+        private double discountRate; // e.g. 0.10 = 10% discount
+        private int loyaltyPoints;
+        private String membershipExpiry;
+        private String membershipTier; // 'Gold', 'Platinum'
+ 
+        // ■■ Constructor ■■
+        public PremiumPassenger(int userId, String name, String email, String password, String
+mobile) {
+                super(userId, name, email, password, mobile);
+                setPassengerType("Premium");
+                this.discountRate = 0.10;
+                this.loyaltyPoints = 0;
+                this.membershipTier = "Gold";
+        }
+ 
+        // ■■ Getters & Setters ■■
+        public double getDiscountRate() { return discountRate; }
+        public void setDiscountRate(double rate) { this.discountRate = rate; }
+        public int getLoyaltyPoints() { return loyaltyPoints; }
+        public String getMembershipTier() { return membershipTier; }
+        public void setMembershipTier(String tier) { this.membershipTier = tier; }
+        public String getMembershipExpiry() { return membershipExpiry; }
+        public void setMembershipExpiry(String d) { this.membershipExpiry = d; }
+ 
+        // ■■ Methods ■■
+        public double applyDiscount(double fare) {
+                double discounted = fare - (fare * discountRate);
+                System.out.println("Discount applied: LKR " + (fare - discounted));
+                return discounted;
+        }
+ 
+        public void addLoyaltyPoints(int points) {
+                this.loyaltyPoints += points;
+                System.out.println("Points added! Total: " + loyaltyPoints);
+                upgradeTier();
+        }
+ 
+        private void upgradeTier() {
+                if (loyaltyPoints >= 1000) membershipTier = "Platinum";
+                else if (loyaltyPoints >= 500) membershipTier = "Gold";
+        }
+ 
+        public void redeemPoints(int points) {
+                if (points <= loyaltyPoints) {
+                        loyaltyPoints -= points;
+                        double credit = points * 0.5; // 1 point = LKR 0.50
+                        topUpWallet(credit);
+                        System.out.println("Redeemed " + points + " points for LKR " + credit);
+                } else {
+                        System.out.println("Not enough loyalty points.");
+                }
+        }
+ 
+        @Override
+        public void displayProfile() {
+                super.displayProfile();
+                System.out.println("Tier : " + membershipTier);
+                System.out.println("Points : " + loyaltyPoints);
+                System.out.println("Discount: " + (discountRate * 100) + "%");
+        }
+}
+class RegularPassenger extends Passenger
+public class RegularPassenger extends Passenger {
+        private int totalTrips;
+        private boolean isEligibleForUpgrade;
+ 
+        public RegularPassenger(int userId, String name, String email, String password, String
+mobile) {
+                super(userId, name, email, password, mobile);
+                setPassengerType("Regular");
+                this.totalTrips = 0;
+        }
+ 
+        public int getTotalTrips() { return totalTrips; }
+        public boolean isEligibleForUpgrade() { return isEligibleForUpgrade; }
+ 
+        public void incrementTrips() {
+                totalTrips++;
+                if (totalTrips >= 20) isEligibleForUpgrade = true;
+        }
+ 
+        public PremiumPassenger upgradeToPremium() {
+                if (isEligibleForUpgrade) {
+                        System.out.println(getName() + " upgraded to Premium!");
+                        return new PremiumPassenger(getUserId(), getName(), getEmail(), "",
+getMobile());
+                }
+                System.out.println("Not eligible yet. Complete " + (20 - totalTrips) + " more
+trips.");
+                return null;
+        }
+ 
+        @Override
+        public void displayProfile() {
+                super.displayProfile();
+                System.out.println("Trips : " + totalTrips);
+                System.out.println("Upgrade : " + (isEligibleForUpgrade ? "Eligible" : "Not
+yet"));
+        }
+}
+Component 02 — Student 2492 Driver & Vehicle Management
+class Driver extends User
+import java.io.*;
+import java.util.*;
+ 
+public class Driver extends User {
+        private String licenseNo;
+        private String status; // 'Available', 'OnTrip', 'Offline'
+        private String currentLocation;
+        private double rating;
+        private int totalTrips;
+        private Vehicle assignedVehicle;
+ 
+        public Driver(int userId, String name, String email, String password, String mobile,
+String licenseNo) {
+                super(userId, name, email, password, mobile, "driver");
+                this.licenseNo = licenseNo;
+                this.status = "Offline";
+                this.rating = 0.0;
+                this.totalTrips = 0;
+        }
+ 
+        public String getLicenseNo() { return licenseNo; }
+        public String getStatus() { return status; }
+        public void setStatus(String status) { this.status = status; }
+        public String getCurrentLocation() { return currentLocation; }
+        public void setCurrentLocation(String l) { this.currentLocation = l; }
+        public double getRating() { return rating; }
+        public void setRating(double rating) { this.rating = rating; }
+        public int getTotalTrips() { return totalTrips; }
+        public Vehicle getAssignedVehicle() { return assignedVehicle; }
+        public void setAssignedVehicle(Vehicle v){ this.assignedVehicle = v; }
+ 
+        public void goOnline() { this.status = "Available"; System.out.println(getName() + " is
+now online."); }
+        public void goOffline() { this.status = "Offline"; System.out.println(getName() + " is
+now offline."); }
+        public void acceptTrip(int bookingId) { this.status = "OnTrip"; totalTrips++; }
+        public void completeTrip() { this.status = "Available"; }
+ 
+        public void saveToFile() throws IOException {
+                FileWriter fw = new FileWriter("drivers.txt", true);
+                fw.write(getUserId() + "," + getName() + "," + getEmail() + ","
+                              + getMobile() + "," + licenseNo + "," + status + "\n");
+                fw.close();
+        }
+ 
+        @Override public boolean login(String email, String password) { return
+getEmail().equals(email); }
+        @Override public void displayProfile() {
+                System.out.println("Driver: " + getName() + " | Status: " + status + " | Rating:
+" + rating);
+        }
+}
+class Vehicle extends (Abstract)
+public abstract class Vehicle {
+        private int vehicleId;
+        private String plateNo;
+        private String model;
+        private int year;
+        private String type; // 'Sedan', 'SUV', 'Van'
+        private int capacity;
+        private String maintenanceDate;
+ 
+        public Vehicle(int vehicleId, String plateNo, String model, int year, String type, int
+capacity) {
+                this.vehicleId = vehicleId;
+                this.plateNo = plateNo;
+                this.model = model;
+                this.year = year;
+                this.type = type;
+                this.capacity = capacity;
+        }
+ 
+        public int getVehicleId() { return vehicleId; }
+        public String getPlateNo() { return plateNo; }
+        public String getModel() { return model; }
+        public int getYear() { return year; }
+        public String getType() { return type; }
+        public int getCapacity() { return capacity; }
+        public String getMaintenanceDate() { return maintenanceDate; }
+        public void setMaintenanceDate(String d) { this.maintenanceDate = d; }
+ 
+        // Abstract methods — Polymorphism
+        public abstract double calculateFuelCost(double distanceKm);
+        public abstract String getFuelType();
+ 
+        public void displayInfo() {
+                System.out.println("Vehicle: " + model + " (" + plateNo + ") | Type: " + type + "
+| Fuel: " + getFuelType());
+        }
+}
+class ElectricVehicle extends Vehicle
+public class ElectricVehicle extends Vehicle {
+        private double batteryCapacityKwh;
+        private double chargePerKwh;
+        private double rangeKm;
+ 
+        public ElectricVehicle(int id, String plate, String model, int year, String type, int
+cap,
+                                                        double batteryKwh, double chargePerKwh,
+double rangeKm) {
+                super(id, plate, model, year, type, cap);
+                this.batteryCapacityKwh = batteryKwh;
+                this.chargePerKwh = chargePerKwh;
+                this.rangeKm = rangeKm;
+        }
+ 
+        public double getBatteryCapacity() { return batteryCapacityKwh; }
+        public double getRangeKm() { return rangeKm; }
+ 
+        @Override
+        public double calculateFuelCost(double distanceKm) {
+                return (distanceKm / rangeKm) * batteryCapacityKwh * chargePerKwh;
+        }
+ 
+        @Override public String getFuelType() { return "Electric"; }
+}
+class GasolineVehicle extends Vehicle
+public class GasolineVehicle extends Vehicle {
+        private double fuelEfficiencyKmPerL;
+        private double pricePerLitre;
+ 
+        public GasolineVehicle(int id, String plate, String model, int year, String type, int
+cap,
+                                                        double efficiency, double pricePerLitre)
+{
+                super(id, plate, model, year, type, cap);
+                this.fuelEfficiencyKmPerL = efficiency;
+                this.pricePerLitre = pricePerLitre;
+        }
+ 
+        public double getFuelEfficiency() { return fuelEfficiencyKmPerL; }
+        public double getPricePerLitre() { return pricePerLitre; }
+        public void setPricePerLitre(double p) { this.pricePerLitre = p; }
+ 
+        @Override
+        public double calculateFuelCost(double distanceKm) {
+                return (distanceKm / fuelEfficiencyKmPerL) * pricePerLitre;
+        }
+ 
+        @Override public String getFuelType() { return "Gasoline"; }
+}
+Component 03 — Student 2152 Trip Booking & Dispatch
+class Booking
+import java.io.*;
+import java.util.*;
+ 
+public class Booking {
+        private int bookingId;
+        private int passengerId;
+        private int driverId;
+        private String pickupLocation;
+        private String dropoffLocation;
+        private String status; //
+'Pending','Accepted','Arrived','InProgress','Completed','Cancelled'
+        private double fare;
+        private String rideType; // 'Economy', 'Comfort', 'Luxury'
+        private String createdAt;
+ 
+        public Booking(int bookingId, int passengerId, String pickup, String dropoff, String
+rideType) {
+                this.bookingId = bookingId;
+                this.passengerId = passengerId;
+                this.pickupLocation = pickup;
+                this.dropoffLocation = dropoff;
+                this.rideType = rideType;
+                this.status = "Pending";
+        }
+ 
+        public int getBookingId() { return bookingId; }
+        public int getPassengerId() { return passengerId; }
+        public int getDriverId() { return driverId; }
+        public void setDriverId(int driverId) { this.driverId = driverId; }
+        public String getPickupLocation() { return pickupLocation; }
+        public String getDropoffLocation() { return dropoffLocation; }
+        public String getStatus() { return status; }
+        public void setStatus(String status) { this.status = status; }
+        public double getFare() { return fare; }
+        public void setFare(double fare) { this.fare = fare; }
+        public String getRideType() { return rideType; }
+ 
+        public void cancelBooking() { this.status = "Cancelled"; System.out.println("Booking " +
+bookingId + " cancelled."); }
+        public void completeBooking(){ this.status = "Completed"; System.out.println("Booking " +
+bookingId + " completed."); }
+ 
+        public void saveToFile() throws IOException {
+                FileWriter fw = new FileWriter("bookings.txt", true);
+                fw.write(bookingId + "," + passengerId + "," + driverId + ","
+                              + pickupLocation + "," + dropoffLocation + "," + status + "," +
+fare + "," + rideType + "\n");
+                fw.close();
+        }
+ 
+        public static List loadFromFile() throws IOException {
+                List list = new ArrayList<>();
+                BufferedReader br = new BufferedReader(new FileReader("bookings.txt"));
+                String line;
+                while ((line = br.readLine()) != null) {
+                        String[] p = line.split(",");
+                        if (p.length >= 8) {
+                                Booking b = new Booking(Integer.parseInt(p[0]),
+Integer.parseInt(p[1]), p[3], p[4], p[7]);
+                                b.setDriverId(Integer.parseInt(p[2]));
+                                b.setStatus(p[5]);
+                                b.setFare(Double.parseDouble(p[6]));
+                                list.add(b);
+                        }
+                }
+                br.close();
+                return list;
+        }
+}
+class FareCalculator extends (Abstract)
+public abstract class FareCalculator {
+        protected double baseFare;
+        protected double ratePerKm;
+        protected double surgeMultiplier;
+ 
+        public double getBaseFare() { return baseFare; }
+        public double getRatePerKm() { return ratePerKm; }
+        public double getSurgeMultiplier() { return surgeMultiplier; }
+        public void setSurgeMultiplier(double surge){ this.surgeMultiplier = surge; }
+ 
+        // Abstract — each ride type overrides (Polymorphism)
+        public abstract double calculateFare(double distanceKm);
+ 
+        // Abstraction — hides complex logic from UI
+        protected double calculateDistance(String pickup, String dropoff) {
+                // Simplified distance calculation
+                return Math.abs(pickup.hashCode() - dropoff.hashCode()) % 30 + 1;
+        }
+ 
+        public void printFareBreakdown(double distanceKm) {
+                System.out.println("Base Fare : LKR " + baseFare);
+                System.out.println("Distance : " + distanceKm + " km");
+                System.out.println("Rate/km : LKR " + ratePerKm);
+                System.out.println("Surge : x" + surgeMultiplier);
+                System.out.println("Total Fare : LKR " + calculateFare(distanceKm));
+        }
+}
+class EconomyFare / ComfortFare / LuxuryFare extends FareCalculator
+public class EconomyFare extends FareCalculator {
+        public EconomyFare() { baseFare = 50.0; ratePerKm = 30.0; surgeMultiplier = 1.0; }
+        @Override
+        public double calculateFare(double distanceKm) {
+                return (baseFare + (ratePerKm * distanceKm)) * surgeMultiplier;
+        }
+}
+ 
+public class ComfortFare extends FareCalculator {
+        public ComfortFare() { baseFare = 100.0; ratePerKm = 55.0; surgeMultiplier = 1.0; }
+        @Override
+        public double calculateFare(double distanceKm) {
+                return (baseFare + (ratePerKm * distanceKm)) * surgeMultiplier;
+        }
+}
+ 
+public class LuxuryFare extends FareCalculator {
+        private double premiumCharge = 100.0;
+        public LuxuryFare() { baseFare = 150.0; ratePerKm = 80.0; surgeMultiplier = 1.0; }
+        @Override
+        public double calculateFare(double distanceKm) {
+                return (baseFare + (ratePerKm * distanceKm) + premiumCharge) * surgeMultiplier;
+        }
+}
+Component 04 — Student 0642 Admin Operations
+class Admin extends User
+import java.io.*;
+import java.util.*;
+ 
+public class Admin extends User {
+        private String adminRole; // 'Admin' or 'SuperAdmin'
+        private String lastLogin;
+        private boolean isActive;
+ 
+        public Admin(int userId, String name, String email, String password, String mobile,
+String adminRole) {
+                super(userId, name, email, password, mobile, "admin");
+                this.adminRole = adminRole;
+                this.isActive = true;
+        }
+ 
+        public String getAdminRole() { return adminRole; }
+        public void setAdminRole(String role) { this.adminRole = role; }
+        public String getLastLogin() { return lastLogin; }
+        public void setLastLogin(String date) { this.lastLogin = date; }
+        public boolean isActive() { return isActive; }
+        public void setActive(boolean active) { this.isActive = active; }
+ 
+        public void viewSystemLogs() throws IOException {
+                BufferedReader br = new BufferedReader(new FileReader("system_logs.txt"));
+                String line;
+                System.out.println("=== System Logs ===");
+                while ((line = br.readLine()) != null) System.out.println(line);
+                br.close();
+        }
+ 
+        public void updateFareSettings(String vehicleType, double baseFare, double ratePerKm)
+throws IOException {
+                FileWriter fw = new FileWriter("system_settings.txt", true);
+                fw.write(vehicleType + "," + baseFare + "," + ratePerKm + "\n");
+                fw.close();
+                System.out.println("Fare updated for " + vehicleType);
+        }
+ 
+        public void revokeAccess(int adminId) throws IOException {
+                System.out.println("Access revoked for admin: " + adminId);
+        }
+ 
+        public void saveToFile() throws IOException {
+                FileWriter fw = new FileWriter("admins.txt", true);
+                fw.write(getUserId() + "," + getName() + "," + getEmail() + "," + adminRole + ","
++ isActive + "\n");
+                fw.close();
+        }
+ 
+        @Override public boolean login(String email, String password) { return
+getEmail().equals(email) && isActive; }
+        @Override public void displayProfile() {
+                System.out.println("Admin: " + getName() + " | Role: " + adminRole + " | Active:
+" + isActive);
+        }
+}
+class SuperAdmin extends Admin
+public class SuperAdmin extends Admin {
+        private String accessLevel = "Full";
+        private String secretKey;
+ 
+        public SuperAdmin(int userId, String name, String email, String password, String mobile)
+{
+                super(userId, name, email, password, mobile, "SuperAdmin");
+        }
+ 
+        public String getAccessLevel() { return accessLevel; }
+        public void setSecretKey(String key) { this.secretKey = hashKey(key); }
+ 
+        public void createAdminAccount(Admin admin) throws IOException {
+                admin.saveToFile();
+                System.out.println("Admin account created: " + admin.getName());
+                SystemLog.logAction(getUserId(), "Created admin: " + admin.getName());
+        }
+ 
+        public void deleteAdminAccount(int adminId) throws IOException {
+                System.out.println("Admin " + adminId + " deleted by SuperAdmin.");
+                SystemLog.logAction(getUserId(), "Deleted admin: " + adminId);
+        }
+ 
+        public void configureServiceArea(String area) throws IOException {
+                FileWriter fw = new FileWriter("system_settings.txt", true);
+                fw.write("service_area," + area + "\n");
+                fw.close();
+        }
+ 
+        private String hashKey(String key) { return Integer.toHexString(key.hashCode()); }
+}
+class SystemLog
+import java.io.*;
+ 
+public class SystemLog {
+        private int logId;
+        private int adminId;
+        private String action;
+        private String timestamp;
+ 
+        public SystemLog(int logId, int adminId, String action, String timestamp) {
+                this.logId = logId;
+                this.adminId = adminId;
+                this.action = action;
+                this.timestamp = timestamp;
+        }
+ 
+        public int getLogId() { return logId; }
+        public int getAdminId() { return adminId; }
+        public String getAction() { return action; }
+        public String getTimestamp() { return timestamp; }
+ 
+        public static void logAction(int adminId, String action) throws IOException {
+                FileWriter fw = new FileWriter("system_logs.txt", true);
+                fw.write(adminId + "," + action + "," + new java.util.Date() + "\n");
+                fw.close();
+                System.out.println("Log saved: " + action);
+        }
+}
+Component 05 — Student 1724 Payment & Transaction Management
+class Payment extends (Abstract)
+public abstract class Payment {
+        private int paymentId;
+        private int bookingId;
+        private double amount;
+        private String status; // 'Pending', 'Paid', 'Failed', 'Voided'
+        private String createdAt;
+ 
+        public Payment(int paymentId, int bookingId, double amount) {
+                this.paymentId = paymentId;
+                this.bookingId = bookingId;
+                this.amount = amount;
+                this.status = "Pending";
+        }
+ 
+        public int getPaymentId() { return paymentId; }
+        public int getBookingId() { return bookingId; }
+        public double getAmount() { return amount; }
+        public void setAmount(double amount) { this.amount = amount; }
+        public String getStatus() { return status; }
+        public void setStatus(String status) { this.status = status; }
+        public String getCreatedAt() { return createdAt; }
+        public void setCreatedAt(String date) { this.createdAt = date; }
+ 
+        // Abstract — Polymorphism
+        public abstract boolean processPayment();
+        public abstract String getPaymentType();
+        public abstract void generateReceipt();
+ 
+        public void saveToFile() throws java.io.IOException {
+                java.io.FileWriter fw = new java.io.FileWriter("payments.txt", true);
+                fw.write(paymentId + "," + bookingId + "," + amount + "," + getPaymentType() +
+"," + status + "\n");
+                fw.close();
+        }
+}
+class CardPayment / CashPayment / WalletPayment extends Payment
+public class CardPayment extends Payment {
+        private String cardNumber; // Stored masked
+        private String cardHolderName;
+        private String expiryDate;
+        private String gatewayRef;
+ 
+        public CardPayment(int paymentId, int bookingId, double amount, String cardNo, String
+holder, String expiry) {
+                super(paymentId, bookingId, amount);
+                this.cardNumber = maskCard(cardNo);
+                this.cardHolderName = holder;
+                this.expiryDate = expiry;
+        }
+ 
+        public String getMaskedCard() { return cardNumber; }
+        public String getGatewayRef() { return gatewayRef; }
+ 
+        @Override public boolean processPayment() {
+                this.gatewayRef = "GW" + System.currentTimeMillis();
+                setStatus("Paid");
+                System.out.println("Card payment processed. Ref: " + gatewayRef);
+                return true;
+        }
+        @Override public String getPaymentType() { return "Card"; }
+        @Override public void generateReceipt() {
+                System.out.println("Receipt — Card: " + cardNumber + " | Amount: LKR " +
+getAmount());
+        }
+        private String maskCard(String num) { return "**** **** **** " +
+num.substring(num.length()-4); }
+}
+ 
+public class CashPayment extends Payment {
+        private double amountTendered;
+        private double changeAmount;
+ 
+        public CashPayment(int paymentId, int bookingId, double amount, double tendered) {
+                super(paymentId, bookingId, amount);
+                this.amountTendered = tendered;
+                this.changeAmount = tendered - amount;
+        }
+ 
+        public double getAmountTendered() { return amountTendered; }
+        public double getChangeAmount() { return changeAmount; }
+ 
+        @Override public boolean processPayment() {
+                if (amountTendered >= getAmount()) { setStatus("Paid"); return true; }
+                System.out.println("Insufficient cash."); return false;
+        }
+        @Override public String getPaymentType() { return "Cash"; }
+        @Override public void generateReceipt() {
+                System.out.println("Receipt — Cash | Amount: LKR " + getAmount() + " | Change:
+LKR " + changeAmount);
+        }
+}
+ 
+public class WalletPayment extends Payment {
+        private double walletBalanceBefore;
+        private double walletBalanceAfter;
+ 
+        public WalletPayment(int paymentId, int bookingId, double amount, double walletBalance) {
+                super(paymentId, bookingId, amount);
+                this.walletBalanceBefore = walletBalance;
+        }
+ 
+        @Override public boolean processPayment() {
+                if (walletBalanceBefore >= getAmount()) {
+                        walletBalanceAfter = walletBalanceBefore - getAmount();
+                        setStatus("Paid");
+                        System.out.println("Wallet payment done. Remaining: LKR " +
+walletBalanceAfter);
+                        return true;
+                }
+                System.out.println("Insufficient wallet balance."); return false;
+        }
+        @Override public String getPaymentType() { return "Wallet"; }
+        @Override public void generateReceipt() {
+                System.out.println("Receipt — Wallet | Amount: LKR " + getAmount() + " | Balance:
+LKR " + walletBalanceAfter);
+        }
+}
+Component 06 — Student 1536 Rating & Feedback Management
+class Feedback extends (Abstract)
+public abstract class Feedback {
+        private int feedbackId;
+        private int bookingId;
+        private int reviewerId;
+        private int revieweeId;
+        private int rating; // 1 to 5
+        private String comment;
+        private String createdAt;
+        private boolean isVisible;
+ 
+        public Feedback(int feedbackId, int bookingId, int reviewerId, int revieweeId, int
+rating, String comment) {
+                this.feedbackId = feedbackId;
+                this.bookingId = bookingId;
+                this.reviewerId = reviewerId;
+                this.revieweeId = revieweeId;
+                this.setRating(rating);
+                this.comment = comment;
+                this.isVisible = true;
+        }
+ 
+        public int getFeedbackId() { return feedbackId; }
+        public int getBookingId() { return bookingId; }
+        public int getReviewerId() { return reviewerId; }
+        public int getRevieweeId() { return revieweeId; }
+        public int getRating() { return rating; }
+        public void setRating(int rating) { if(rating>=1&&rating;<=5) this.rating=rating; }
+        public String getComment() { return comment; }
+        public void setComment(String c) { this.comment = c; }
+        public boolean isVisible() { return isVisible; }
+        public void setVisible(boolean vis) { this.isVisible = vis; }
+        public String getCreatedAt() { return createdAt; }
+        public void setCreatedAt(String date) { this.createdAt = date; }
+ 
+        // Abstract — Polymorphism
+        public abstract String getFeedbackType();
+        public abstract void displayFeedback();
+ 
+        public void saveToFile() throws java.io.IOException {
+                java.io.FileWriter fw = new java.io.FileWriter("feedback.txt", true);
+                fw.write(feedbackId+","+bookingId+","+reviewerId+","+revieweeId+","+rating+","+c
+omment+"\n");
+                fw.close();
+        }
+}
+class DriverFeedback / PassengerFeedback extends Feedback
+public class DriverFeedback extends Feedback {
+        private String[] tags; // e.g. {'Safe Driver','Friendly','On Time'}
+        private boolean isStarReview;
+ 
+        public DriverFeedback(int fid, int bid, int reviewerId, int driverId, int rating, String
+comment) {
+                super(fid, bid, reviewerId, driverId, rating, comment);
+        }
+ 
+        public String[] getTags() { return tags; }
+        public void setTags(String[] tags) { this.tags = tags; }
+        public boolean isStarReview() { return isStarReview; }
+        public void setStarReview(boolean s){ this.isStarReview = s; }
+ 
+        @Override public String getFeedbackType() { return "Driver Feedback"; }
+        @Override public void displayFeedback() {
+                System.out.println("[Driver Review] Rating: " + getRating() + "/5 — " +
+getComment());
+                if (tags != null) { System.out.print("Tags: "); for(String t:tags)
+System.out.print(t+" "); System.out.println(); }
+        }
+}
+ 
+public class PassengerFeedback extends Feedback {
+        private boolean isReportedAbuse;
+        private String reportReason;
+ 
+        public PassengerFeedback(int fid, int bid, int reviewerId, int passId, int rating, String
+comment) {
+                super(fid, bid, reviewerId, passId, rating, comment);
+        }
+ 
+        public boolean isReportedAbuse() { return isReportedAbuse; }
+        public void setReportedAbuse(boolean rep) { this.isReportedAbuse = rep; }
+        public String getReportReason() { return reportReason; }
+        public void setReportReason(String reason) { this.reportReason = reason; }
+ 
+        @Override public String getFeedbackType() { return "Passenger Feedback"; }
+        @Override public void displayFeedback() {
+                System.out.println("[Passenger Review] Rating: " + getRating() + "/5 — " +
+getComment());
+                if (isReportedAbuse) System.out.println("!! Reported: " + reportReason);
+        }
+}
+class RatingSummary
+public class RatingSummary {
+        private int userId;
+        private double averageScore;
+        private int totalReviews;
+        private int fiveStars, fourStars, threeStars, twoStars, oneStar;
+ 
+        public RatingSummary(int userId) { this.userId = userId; }
+ 
+        public int getUserId() { return userId; }
+        public double getAverageScore() { return averageScore; }
+        public int getTotalReviews() { return totalReviews; }
+ 
+        public void addRating(int stars) {
+                totalReviews++;
+                switch(stars) {
+                        case 5: fiveStars++; break;
+                        case 4: fourStars++; break;
+                        case 3: threeStars++; break;
+                        case 2: twoStars++; break;
+                        case 1: oneStar++; break;
+                }
+                recalculateAverage();
+        }
+ 
+        private void recalculateAverage() {
+                int total = (5*fiveStars)+(4*fourStars)+(3*threeStars)+(2*twoStars)+(1*oneStar);
+                averageScore = totalReviews > 0 ? (double) total / totalReviews : 0.0;
+        }
+ 
+        public double getPercentage(int stars) {
+                return totalReviews > 0 ? (double) stars / totalReviews * 100 : 0;
+        }
+ 
+        public void displaySummary() {
+                System.out.println("Rating Summary for User " + userId);
+                System.out.println("Average : " + String.format("%.1f",averageScore) + "/5");
+                System.out.println("Total : " + totalReviews + " reviews");
+                System.out.println("5 stars : " + fiveStars);
+                System.out.println("4 stars : " + fourStars);
+                System.out.println("3 stars : " + threeStars);
+                System.out.println("2 stars : " + twoStars);
+                System.out.println("1 star : " + oneStar);
+        }
+}
+SE1020 OOP — UrbanRide Project | Complete Java Source Code | Group Leader: Student 3705

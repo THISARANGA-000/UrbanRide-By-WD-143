@@ -1,0 +1,170 @@
+SE1020 - Object Oriented Programming
+UrbanRide Taxi and Cab Booking Platform
+Project Workload Distribution
+Student ID Component Assigned Module
+1536 Component 01 User Management (Passenger)
+2492 Component 02 Driver & Vehicle Management
+2152 Component 03 Trip Booking & Dispatch
+0642 Component 04 Admin Operations
+1724 Component 05 Payment & Transaction Management
+3705 Component 06 Rating & Feedback Management
+Component 01 | Student ID: 1536 User Management (Passenger)
+Manages passenger accounts, including registration, profile maintenance, and security settings.
+CRUD Operations
+Create: Register a new passenger
+and store details in passengers.txt.
+Read: Search for passenger profiles
+by ID or mobile number to display
+account history.
+Update: Modify passenger details
+such as saved home/work addresses
+and payment methods.
+Delete: Remove passenger
+accounts from the system.
+UI Components
+• Passenger Registration
+Page (HTML, Bootstrap)
+• Passenger Login Page
+• Profile Settings Page
+• Passenger Directory (Admin
+View)
+OOP Concepts
+Encapsulation: Secure passenger data
+using private attributes with getters/setters in
+a Passenger class.
+Inheritance: PremiumPassenger and
+RegularPassenger classes inherit from a
+base User class.
+Polymorphism: Different login
+authentication methods for social media vs.
+email.
+Component 02 | Student ID: 2492 Driver & Vehicle Management
+Handles the onboarding and management of drivers and their associated vehicles.
+CRUD Operations
+Create: Add new driver profiles and
+vehicle specs (License plate, Model)
+to drivers.txt.
+Read: Search for available drivers by
+location or vehicle type (Sedan,
+SUV).
+Update: Update driver availability
+status or vehicle maintenance
+records.
+Delete: Remove drivers who are no
+longer active or have expired
+licenses.
+UI Components
+• Driver Application Form
+• Vehicle Status Dashboard
+• Driver Profile Edit Page
+• Active Drivers List
+OOP Concepts
+Encapsulation: Vehicle class stores
+specific details like engine type and
+capacity.
+Inheritance: ElectricVehicle and
+GasolineVehicle inherit from the Vehicle
+class.
+Polymorphism: Overriding
+calculateFuelCost() methods based on
+vehicle type.
+Component 03 | Student ID: 2152 Trip Booking & Dispatch
+Manages the core logic of requesting rides, matching drivers, and tracking trip status.
+CRUD Operations
+Create: Record a new ride request in
+bookings.txt.
+Read: View trip history and active
+ride status.
+Update: Update trip status (e.g.,
+Arrived, In Progress, Completed) and
+calculate final fare.
+Delete: Cancel a booking before the
+driver arrives.
+UI Components
+• Ride Request Page (Map
+View)
+• Active Trip Tracking Screen
+• Booking History List
+OOP Concepts
+Encapsulation: Trip class manages specific
+records for pickup/drop-off points and
+timestamps.
+Abstraction: Methods to hide complex
+distance-calculation logic from the user
+interface.
+Polymorphism: Different fare calculation
+algorithms for Economy vs. Luxury rides.
+Component 04 | Student ID: 0642 Admin Operations
+Provides oversight of the entire platform, including financial reporting and system moderation.
+CRUD Operations
+Create: Register internal admin
+accounts in admins.txt.
+Read: Access system-wide activity
+logs and revenue reports.
+Update: Modify system settings,
+such as base fare rates or service
+areas.
+Delete: Revoke admin access or
+remove outdated system logs.
+UI Components
+• Main Admin Dashboard
+(Statistics)
+• Fare Management Panel
+• System Audit Logs
+OOP Concepts
+Encapsulation: Secure admin credentials
+within an Admin class.
+Inheritance: SuperAdmin inherits from
+Admin with additional permissions.
+Abstraction: Abstracting admin-only data
+processing methods from the public API.
+Component 05 | Student ID: 1724 Payment & Transaction Management
+Manages the billing process, including digital wallets, receipts, and driver payouts.
+CRUD Operations
+Create: Generate new invoices in
+payments.txt upon trip completion.
+Read: Allow users to view and
+download past payment receipts.
+Update: Update payment status
+(e.g., Pending to Paid) after
+verification.
+Delete: Clear failed or voided
+transaction records.
+UI Components
+• Payment Selection Page
+• Digital Receipt View
+• Wallet Top-up Page
+OOP Concepts
+Encapsulation: Payment class to store
+transaction IDs and amounts.
+Inheritance: CardPayment and
+CashPayment classes inherit from Payment.
+Polymorphism: Unified processPayment()
+method that behaves differently for each
+payment type.
+Component 06 | Student ID: 3705 Rating & Feedback Management
+Allows passengers and drivers to rate each other and provide feedback on the ride experience.
+CRUD Operations
+Create: Submit new ratings and
+comments to feedback.txt.
+Read: Display average
+driver/passenger ratings on their
+profiles.
+Update: Allow users to edit their
+feedback within a specific timeframe.
+Delete: Remove reviews that violate
+community guidelines.
+UI Components
+• Post-Ride Rating Popup
+• User Feedback Summary
+Page
+• Admin Moderation Panel for
+Disputes
+OOP Concepts
+Encapsulation: Feedback class to protect
+user comments and scores.
+Inheritance: DriverFeedback and
+PassengerFeedback classes.
+Polymorphism: Distinct display logic for
+Starred Reviews vs. Written Reports.
+SE1020 Object Oriented Programming — UrbanRide Project | Workload Distribution
