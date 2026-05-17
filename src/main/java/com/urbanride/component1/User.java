@@ -6,8 +6,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class User {
 
-    // ID is defined in subclasses (Passenger, Driver, Admin) 
-    // to allow for independent sequence generators.
+    // ID is defined in subclasses (Passenger, Driver, Admin)
 
     @Column(nullable = false)
     private String name;
@@ -53,7 +52,7 @@ public abstract class User {
     public abstract boolean login(String email, String password);
     public abstract void displayProfile();
 
-    /** Simple hash for OOP demo â€” not production-grade */
+    // Simple hash for OOP demo  not production-grade
     public static String hashPassword(String password) {
         return Integer.toHexString(password.hashCode());
     }
