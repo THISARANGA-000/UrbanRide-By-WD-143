@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Profile | UrbanRide</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background-color: #F3F4F6;
+        }
+
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #EAB308 0%, #CA8A04 100%);
+            border: none;
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #CA8A04 0%, #A16207 100%);
+            color: #000;
+        }
+    </style>
+</head>
+
+<body class="pt-5">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand urbanride-logo" href="index.html">UrbanRide</a>
+            <div class="d-flex align-items-center">
+                <span class="text-dark me-3 fw-bold" id="userNameDisplay">Loading...</span>
+                <button id="navLogoutBtn" class="btn btn-outline-danger btn-sm"><i
+                        class="fa-solid fa-right-from-bracket me-2"></i>Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5 pt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- User Banner -->
+                <div class="classic-card shadow-sm mb-4 text-center border-0 p-5 position-relative">
+                    <div class="d-inline-block position-relative mb-3">
+                        <div class="rounded-circle bg-white border border-light p-1 shadow-sm"
+                            style="width: 120px; height: 120px;">
+                            <img src="https://ui-avatars.com/api/?name=User&background=random"
+                                class="w-100 h-100 rounded-circle object-fit-cover" id="profileAvatar"
+                                alt="User Avatar">
+                        </div>
+                        <span class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle"
+                            style="width: 25px; height: 25px;"></span>
+                    </div>
+                    <h2 class="fw-bold mb-1 text-dark" id="profileName">Loading...</h2>
+                    <p class="text-muted mb-4" id="passengerType">Premium Passenger</p>
+
+                    <div class="d-flex justify-content-center gap-4 mt-2">
+                        <a href="book-ride.html"
+                            class="btn btn-primary rounded-pill shadow px-5 py-3 fw-bold transition-all hover-lift">
+                            <i class="fa-solid fa-car me-2"></i> Book a Ride
+                        </a>
+                        <a href="booking-history.html"
+                            class="btn btn-outline-dark rounded-pill px-5 py-3 fw-bold transition-all hover-lift">
+                            <i class="fa-solid fa-clock-rotate-left me-2"></i> Booking History
+                        </a>
+                        <a href="my-feedbacks.html"
+                            class="btn btn-outline-primary rounded-pill px-5 py-3 fw-bold transition-all hover-lift">
+                            <i class="fa-solid fa-comment-dots me-2"></i> My Feedbacks
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <!-- Profile Details -->
+                    <div class="col-md-6">
+                        <div class="classic-card shadow-sm h-100 border-0 p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="mb-0 fw-bold text-dark">Personal Details</h4>
+                                <button class="btn btn-sm btn-outline-dark rounded-pill px-3" data-bs-toggle="modal"
+                                    data-bs-target="#editProfileModal"><i class="fa-solid fa-pen me-1"></i>
+                                    Edit</button>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-muted small mb-1 text-uppercase fw-bold">User ID</p>
+                                <h6 id="profileId" class="fw-bold text-dark">#---</h6>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-muted small mb-1 text-uppercase fw-bold">Email</p>
+                                <h6 class="text-primary fw-bold" id="profileEmail">testuser@urbanride.com</h6>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-muted small mb-1 text-uppercase fw-bold">Mobile</p>
+                                <h6 class="fw-bold text-dark" id="profileMobile">+94 77 999 0001</h6>
+                            </div>
+                            <div class="mb-0">
+                                <p class="text-muted small mb-1 text-uppercase fw-bold">Member Since</p>
+                                <h6 class="text-dark fw-bold" id="memberSince">...</h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions & Stats -->
+                    <div class="col-md-6">
+                        <div class="classic-card shadow-sm h-100 border-0 p-4">
+                            <h4 class="mb-4 fw-bold text-dark">Dashboard</h4>
+
+                            <div id="walletContainer"
+                                class="bg-light p-3 rounded-4 border mb-3 d-flex align-items-center justify-content-between">
+                                <div>
+                                    <p class="text-muted small mb-1 text-uppercase fw-bold">Wallet Balance</p>
+                                    <h4 class="text-success mb-0 fw-bold" id="walletBalance">LKR 0</h4>
+                                </div>
+                                <a href="wallet-topup.html" class="btn btn-outline-success btn-sm rounded-circle"
+                                    style="width:40px; height:40px; line-height:28px;"><i
+                                        class="fa-solid fa-plus"></i></a>
+                            </div>
+
+                            <div
+                                class="bg-light p-3 rounded-4 border d-flex justify-content-between align-items-center mb-4">
+                                <div>
+                                    <p class="text-muted small mb-1 text-uppercase fw-bold">Total Bookings</p>
+                                    <h4 class="mb-0 fw-bold text-dark" id="totalRides">0</h4>
+                                </div>
+                                <i class="fa-solid fa-route fs-2 text-muted"></i>
+                            </div>
+
+                            <button id="deleteAccountBtn" class="btn btn-outline-danger w-100 py-2 rounded-3 fw-bold"><i
+                                    class="fa-solid fa-trash me-2"></i> Delete Account</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">Edit Profile</h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div id="updateError" class="alert alert-danger d-none small"></div>
+                    <form id="editProfileForm">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Full Name</label>
+                            <input type="text" class="form-control bg-light border-0 shadow-none" id="editName"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Email Address</label>
+                            <input type="email" class="form-control bg-light border-0 shadow-none" id="editEmail"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Mobile Number</label>
+                            <input type="text" class="form-control bg-light border-0 shadow-none" id="editMobile"
+                                required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 py-3 fw-bold mt-2" id="saveProfileBtn">Save
+                            Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const userIdRaw = localStorage.getItem('urbanride_userId');
+            const userId = userIdRaw ? String(userIdRaw).replace(/[^\d]/g, '') : null;
+            const role = localStorage.getItem('urbanride_role');
+
+            if (userId === null || userId === '') {
+                window.location.replace('login.html');
+                return;
+            }
+
+            const endpoint = `/api/users/${userId}`;
+
+            // Fetch latest profile data from server
+            function loadProfile() {
+                $.ajax({
+                    url: endpoint,
+                    type: 'GET',
+                    success: function (user) {
+                        if (!user) {
+                            console.error("Empty user response");
+                            return;
+                        }
+                        const name = user.name || 'User';
+                        const greeting = name.split(' ')[0];
+                        const displayId = (user.userId !== undefined) ? user.userId : 0;
+
+                        $('#userNameDisplay').text('Welcome, ' + greeting);
+                        $('#profileName').text(name);
+                        $('#profileId').text('#P' + String(displayId).padStart(3, '0'));
+                        $('#profileEmail').text(user.email || 'N/A');
+                        $('#profileMobile').text(user.mobile || 'N/A');
+                        $('#walletBalance').text('LKR ' + (user.walletBalance || 0).toLocaleString());
+                        $('#totalRides').text(user.totalRides || '0');
+                        $('#passengerType').text(user.passengerType || 'Premium Member');
+                        $('#profileAvatar').attr('src', `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff`);
+
+                        if (user.memberSince) {
+                            const joinDate = new Date(user.memberSince).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                            $('#memberSince').text(joinDate);
+                        }
+
+                        // Pre-fill Edit Modal only if it's not open
+                        if (!$('#editProfileModal').hasClass('show')) {
+                            $('#editName').val(name);
+                            $('#editEmail').val(user.email || '');
+                            $('#editMobile').val(user.mobile || '');
+                        }
+                    },
+                    error: function (xhr) {
+                        console.warn("Backend offline or error. Using Demo Mode data.");
+                        const name = localStorage.getItem('urbanride_userName') || 'Demo User';
+                        $('#userNameDisplay').text('Welcome, ' + name.split(' ')[0]);
+                        $('#profileName').text(name);
+                        $('#profileId').text('#P001');
+                        $('#profileEmail').text(localStorage.getItem('urbanride_userEmail') || 'demo@urbanride.com');
+                        $('#profileMobile').text(localStorage.getItem('urbanride_userMobile') || '+94 77 000 0000');
+                        $('#walletBalance').text('LKR 1,500');
+                        $('#totalRides').text('3');
+                        $('#passengerType').text('Premium Member');
+                        $('#profileAvatar').attr('src', `https://ui-avatars.com/api/?name=Demo+User&background=random&color=fff`);
+                        $('#memberSince').text(new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }));
+
+                        // Pre-fill Edit Modal (Demo) only if not open
+                        if (!$('#editProfileModal').hasClass('show')) {
+                            $('#editName').val(name);
+                            $('#editEmail').val(localStorage.getItem('urbanride_userEmail') || 'demo@urbanride.com');
+                            $('#editMobile').val(localStorage.getItem('urbanride_userMobile') || '+94 77 000 0000');
+                        }
+                    }
+                });
+            }
+
+            loadProfile();
+            setInterval(() => {
+                loadProfile();
+            }, 5000);
+
+            $('#navLogoutBtn').click(function () {
+                localStorage.clear();
+                window.location.href = 'login.html';
+            });
+
+            $('#editProfileForm').submit(function (e) {
+                e.preventDefault();
+                const btn = $('#saveProfileBtn');
+                btn.html('<i class="fa-solid fa-spinner fa-spin me-2"></i>Saving...').prop('disabled', true);
+
+                const payload = {
+                    name: $('#editName').val().trim(),
+                    email: $('#editEmail').val().trim(),
+                    mobile: $('#editMobile').val().trim()
+                };
+
+                $.ajax({
+                    url: role === 'driver' ? `/api/drivers/${userId}` : `/api/users/${userId}`,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(payload),
+                    success: function () {
+                        localStorage.setItem('urbanride_userName', payload.name);
+                        localStorage.setItem('urbanride_userEmail', payload.email);
+                        localStorage.setItem('urbanride_userMobile', payload.mobile);
+                        location.reload();
+                    },
+                    error: function (xhr) {
+                        // Demo mode fallback
+                        if (xhr.status === 0 || xhr.status === 404 || xhr.status === 500) {
+                            localStorage.setItem('urbanride_userName', payload.name);
+                            localStorage.setItem('urbanride_userEmail', payload.email);
+                            localStorage.setItem('urbanride_userMobile', payload.mobile);
+                            location.reload();
+                            return;
+                        }
+                        btn.html('Save Changes').prop('disabled', false);
+                        $('#updateError').text(xhr.responseJSON?.error || "Update failed").removeClass('d-none');
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="js/app.js?v=2"></script>
+</body>
+
+</html>

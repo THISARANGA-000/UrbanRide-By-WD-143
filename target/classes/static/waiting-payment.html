@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waiting for Payment | UrbanRide</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .waiting-animation {
+            font-size: 5rem;
+            color: var(--primary);
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+        .pulse-ring {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: #FEF3C7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pulse-ring::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s linear infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-light d-flex align-items-center" style="min-height: 100vh;">
+
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="classic-card shadow-lg p-5 border">
+                    <div class="pulse-ring mb-5">
+                        <i class="fa-solid fa-hand-holding-dollar fs-1 text-primary"></i>
+                    </div>
+                    
+                    <h2 class="fw-bold text-dark mb-3">Waiting for Payment</h2>
+                    <p class="text-muted fs-5 mb-4">The trip is complete! Please wait while the passenger confirms the payment.</p>
+                    
+                    <div class="bg-light rounded-4 p-4 mb-4 border d-flex justify-content-between align-items-center">
+                        <div class="text-start">
+                            <span class="small fw-bold text-muted text-uppercase d-block mb-1">Total Fare</span>
+                            <h3 class="fw-bold text-success mb-0" id="fareDisplay">LKR 0</h3>
+                        </div>
+                        <div class="text-end">
+                            <span class="small fw-bold text-muted text-uppercase d-block mb-1">Booking ID</span>
+                            <h4 class="fw-bold text-dark mb-0" id="bookingIdDisplay">#B000</h4>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-center text-primary fw-bold gap-2">
+                        <div class="spinner-border spinner-border-sm" role="status"></div>
+                        <span>Processing payment status...</span>
+                    </div>
+
+                    <hr class="my-5 opacity-10">
+
+                    <p id="waitInstruction" class="small text-muted mb-0">The trip is finished. Please wait here until the passenger completes the payment to ensure the transaction is recorded.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookingId = urlParams.get('id');
+            const fare = urlParams.get('fare') || "0";
+
+            if (!bookingId) {
+                window.location.href = "vehicle-dashboard.html";
+                return;
+            }
+
+            $('#bookingIdDisplay').text('#B' + String(bookingId).padStart(3, '0'));
+            $('#fareDisplay').text('LKR ' + parseFloat(fare).toLocaleString());
+
+            // Poll for Paid status
+            const poll = setInterval(function() {
+                $.get('/api/bookings/all', function(bookings) {
+                    const b = bookings.find(x => x.bookingId == bookingId);
+                    if (b) {
+                        if (b.status === 'Paid') {
+                            clearInterval(poll);
+                            // Show success message and a button to return
+                            $('h2').text('Payment Received!').removeClass('text-dark').addClass('text-success');
+                            $('.pulse-ring').html('<i class="fa-solid fa-check fs-1 text-success"></i>').css('background', '#D1FAE5');
+                            $('.spinner-border').parent().hide();
+                            $('#waitInstruction').text('Trip completed successfully. You can now return to your dashboard.');
+                            
+                            // Add a Back to Dashboard button
+                            if (!$('#backToDashBtn').length) {
+                                $('.classic-card').append(`
+                                    <div id="backToDashBtn" class="mt-4 animate__animated animate__fadeInUp">
+                                        <a href="vehicle-dashboard.html" class="btn btn-primary btn-lg w-100 py-3 fw-bold shadow-sm">
+                                            Back to Dashboard <i class="fa-solid fa-arrow-right ms-2"></i>
+                                        </a>
+                                    </div>
+                                `);
+                            }
+
+                            // Auto redirect after payment success
+                            setTimeout(() => {
+                                window.location.href = "vehicle-dashboard.html";
+                            }, 500);
+                        } else if (b.status === 'Cancelled') {
+                            alert("Booking was cancelled.");
+                            window.location.href = "vehicle-dashboard.html";
+                        }
+                    }
+                });
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
