@@ -1,0 +1,5 @@
+5894,wefwe,thumalthisaranga000@gmail.com,wef,Regular
+714,thumal thisaranga,thumalthisaranga000@gmail.com,0766937714,Regular
+4608,thumal thisaranga,thumalthisaranga000@gmail.com,0766937714,Regular
+8325,Test,test@test.com,12345,Regular
+5634,Test User,test5@test.com,0771234567,Regular
