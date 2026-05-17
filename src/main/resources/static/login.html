@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | UrbanRide</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚖</text></svg>">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .split-screen { display: flex; min-height: 100vh; overflow: hidden; }
+        .image-side { 
+            flex: 1; 
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('images/taxi.png') center/cover no-repeat; 
+            position: relative;
+        }
+        .form-side { 
+            flex: 1.5; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            background-color: var(--light);
+            overflow-y: auto;
+        }
+        .error-container { min-height: 50px; } /* Prevent layout shift */
+        @media (max-width: 992px) {
+            .image-side { display: none; }
+            .form-side { background: var(--light); }
+            .glass-card { width: 100%; border: none; box-shadow: none; background: transparent; }
+        }
+    </style>
+</head>
+<body class="p-0 m-0">
+
+    <div class="split-screen w-100">
+        <!-- Image Side -->
+        <div class="image-side d-none d-lg-block">
+            <div class="position-absolute bottom-0 start-0 p-5 z-10 w-100" style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
+                <h1 class="urbanride-logo mb-3 text-white" style="font-size: 3.5rem;">UrbanRide</h1>
+                <p class="fs-4 text-white fw-light">Welcome back.<br>Your ride awaits.</p>
+            </div>
+        </div>
+
+        <!-- Form Side -->
+        <div class="form-side">
+            <div class="glass-card w-100 border-0" style="max-width: 500px;">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold mb-2">Sign In</h2>
+                    <p class="text-muted">Access your UrbanRide account</p>
+                </div>
+
+                <div class="error-container mb-3">
+                    <div id="errorMsg" class="alert alert-danger d-none rounded-3 border-0 bg-danger bg-opacity-10 text-danger animate__animated animate__shakeX" role="alert"></div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-uppercase text-muted">I am a...</label>
+                    <div class="btn-group w-100 shadow-sm" role="group">
+                        <input type="radio" class="btn-check" name="userRole" id="rolePassenger" value="passenger" checked autocomplete="off">
+                        <label class="btn btn-outline-warning py-2 fw-bold text-dark" for="rolePassenger"><i class="fa-solid fa-user me-2"></i>Passenger</label>
+
+                        <input type="radio" class="btn-check" name="userRole" id="roleDriver" value="driver" autocomplete="off">
+                        <label class="btn btn-outline-warning py-2 fw-bold text-dark" for="roleDriver"><i class="fa-solid fa-car me-2"></i>Driver</label>
+                    </div>
+                </div>
+
+                <div class="mb-4 d-none animate__animated animate__fadeIn" id="vehicleTypeSection">
+                    <label class="form-label fw-bold small text-uppercase text-muted">Current Vehicle</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white"><i class="fa-solid fa-truck-pickup text-primary"></i></span>
+                        <select class="form-select border-start-0 ps-0 shadow-none" id="loginVehicleType">
+                            <option value="Bike">Bike</option>
+                            <option value="Three-Wheel">Three-Wheel</option>
+                            <option value="Car">Car</option>
+                        </select>
+                    </div>
+                </div>
+
+
+
+                <form id="loginForm">
+                    <div class="mb-4">
+                        <label class="form-label">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fa-solid fa-envelope text-muted"></i></span>
+                            <input type="email" class="form-control border-start-0 ps-0" id="email" placeholder="Enter your email" required autocomplete="email">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label class="form-label mb-0">Password</label>
+                            <a href="#" class="small text-decoration-none text-warning fw-bold">Forgot?</a>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fa-solid fa-lock text-muted"></i></span>
+                            <input type="password" class="form-control border-start-0 ps-0" id="password" placeholder="Enter your password" required autocomplete="current-password">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-3 mb-4 shadow-sm" id="loginBtn">Sign In <i class="fa-solid fa-arrow-right ms-2"></i></button>
+
+                    <div class="text-center text-muted">
+                        Don't have an account? <a href="register.html" class="text-dark fw-bold text-decoration-none border-bottom border-dark pb-1">Create one</a>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/app.js?v=2"></script>
+    <script>
+        // Toggle vehicle type section based on role
+        $('input[name="userRole"]').change(function() {
+            if ($(this).val() === 'driver') {
+                $('#vehicleTypeSection').removeClass('d-none');
+            } else {
+                $('#vehicleTypeSection').addClass('d-none');
+            }
+        });
+    </script>
+</body>
+</html>
