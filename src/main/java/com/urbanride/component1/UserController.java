@@ -83,7 +83,7 @@ public class UserController {
         Passenger p = opt.get();
         String hashedInput = User.hashPassword(password);
 
-        // ✅ FIXED: actually compare the hashed password
+        // actually compare the hashed password
         if (!p.getPasswordHash().equals(hashedInput)) {
             System.out.println("Login FAILED: Password mismatch for -> " + email);
             return ResponseEntity.status(401).body(Map.of("error", "Invalid email or password"));
@@ -104,7 +104,6 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    // Ã¢â€â‚¬Ã¢â€â‚¬ GET PROFILE Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
     @GetMapping("/{userId}")
     public ResponseEntity<?> getPassenger(@PathVariable int userId) {
         return passengerRepo.findById(userId)
@@ -135,7 +134,6 @@ public class UserController {
             .orElse(ResponseEntity.notFound().build());
     }
 
-    // Ã¢â€â‚¬Ã¢â€â‚¬ UPDATE Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
     @PutMapping("/{userId}")
     public ResponseEntity<?> updatePassenger(@PathVariable int userId, @RequestBody Map<String, Object> payload) {
         try {
@@ -154,7 +152,6 @@ public class UserController {
         }
     }
 
-    // Ã¢â€â‚¬Ã¢â€â‚¬ DELETE Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity<?> deletePassenger(@PathVariable int userId) {
         if (!passengerRepo.existsById(userId)) {
@@ -164,7 +161,6 @@ public class UserController {
         return ResponseEntity.ok(Map.of("message", "Account deleted successfully"));
     }
 
-    // Ã¢â€â‚¬Ã¢â€â‚¬ TOP UP WALLET Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
     @PutMapping("/{userId}/wallet")
     public ResponseEntity<?> topUpWallet(@PathVariable int userId, @RequestBody Map<String, Object> payload) {
         try {
@@ -181,7 +177,7 @@ public class UserController {
                     
                     passengerRepo.save(p);
                     
-                    // Ã°Å¸â€œÂ LOG TO TOPUP FILE
+                    // LOG TO TOPUP FILE
                     logTopUpToFile(p.getUserId(), p.getName(), amount, p.getWalletBalance());
                     
                     return ResponseEntity.ok(Map.of(
@@ -207,7 +203,7 @@ public class UserController {
                     if (p.deductWallet(amount)) {
                         passengerRepo.save(p);
                         
-                        // 💾 LOG TO DEDUCTION FILE
+                        // OG TO DEDUCTION FILE
                         logDeductionToFile(p.getUserId(), p.getName(), amount, p.getWalletBalance());
                         
                         return ResponseEntity.ok(Map.of("message", "Payment successful", "newBalance", p.getWalletBalance()));
