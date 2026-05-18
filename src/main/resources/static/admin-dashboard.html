@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | UrbanRide</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background: #F3F4F6;
+            overflow: hidden;
+        }
+
+        .admin-sidebar {
+            width: 280px;
+            background: #111827;
+            border-right: 1px solid #E5E7EB;
+            z-index: 100;
+        }
+
+        .admin-content {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            background: #F3F4F6;
+        }
+
+        .nav-link {
+            color: #9CA3AF;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-radius: 8px;
+            margin-bottom: 0.2rem;
+        }
+
+        .nav-link:hover {
+            color: #FFFFFF;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link.active {
+            background: var(--primary);
+            color: #111827;
+            border-left: 4px solid #EAB308;
+        }
+
+        .kpi-card {
+            transition: all 0.2s;
+            background: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-custom {
+            background: #FFFFFF;
+            color: #111827;
+        }
+
+        .table-custom th {
+            border-bottom: 2px solid #E5E7EB;
+            color: #4B5563;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            padding: 1rem;
+        }
+
+        .table-custom td {
+            border-bottom: 1px solid #E5E7EB;
+            padding: 1rem;
+            vertical-align: middle;
+        }
+
+        .table-custom tbody tr:hover td {
+            background: #F9FAFB;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex h-100 min-vh-100">
+        <!-- Sidebar -->
+        <div class="admin-sidebar d-flex flex-column p-4">
+            <a href="#" class="urbanride-logo fs-2 text-decoration-none mb-5 text-center text-white">UrbanRide</a>
+
+            <p class="text-muted small fw-bold text-uppercase mb-3 px-2">Management</p>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item"><a href="#" id="navDashboard" class="nav-link active px-3 py-2"><i
+                            class="fa-solid fa-chart-pie me-3 w-20px"></i> Dashboard</a></li>
+                <li class="nav-item"><a href="#" id="navPassengers" class="nav-link px-3 py-2"><i
+                            class="fa-solid fa-users me-3 w-20px"></i> Passengers</a></li>
+                <li class="nav-item"><a href="#" id="navDrivers" class="nav-link px-3 py-2"><i
+                            class="fa-solid fa-car me-3 w-20px"></i> Drivers</a></li>
+                <li class="nav-item"><a href="#" id="navBookings" class="nav-link px-3 py-2"><i
+                            class="fa-solid fa-route me-3 w-20px"></i> Bookings</a></li>
+
+            </ul>
+
+            <div class="mt-4 pt-4 border-top border-secondary d-flex align-items-center">
+                <img id="adminAvatar" src="https://ui-avatars.com/api/?name=Admin&background=random" alt="Admin"
+                    width="40" height="40" class="rounded-circle me-3 border border-primary">
+                <div>
+                    <h6 class="mb-0 fw-bold text-white" id="adminSidebarName">Super Admin</h6>
+                    <small class="text-muted" id="adminSidebarRole">Administrator</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="admin-content p-5" id="mainContent">
+            <!-- Dynamic content will be injected here -->
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Load Admin Session
+            const adminName = localStorage.getItem('urbanride_userName') || 'Admin';
+            const adminRole = localStorage.getItem('urbanride_adminRole') || 'System Admin';
+
+            $('#adminSidebarName').text(adminName);
+            $('#adminSidebarRole').text(adminRole);
+            $('#adminAvatar').attr('src', `https://ui-avatars.com/api/?name=${encodeURIComponent(adminName)}&background=FACC15&color=111827`);
+
+            let refreshInterval;
+
+            function showDashboard() {
+                clearInterval(refreshInterval);
+                $('.nav-link').removeClass('active');
+                $('#navDashboard').addClass('active');
+
+                $('#mainContent').html(`
+                    <div class="d-flex justify-content-between align-items-end mb-5">
+                        <div>
+                            <h2 class="fw-bold mb-1 text-dark">Dashboard Overview</h2>
+                            <p class="text-muted mb-0">System performance and metrics for today.</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-3">
+                            <div class="kpi-card p-4 border-start border-4 border-primary h-100">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div class="text-muted small fw-bold text-uppercase">Total Revenue</div>
+                                    <div class="bg-primary bg-opacity-25 text-dark rounded p-2"><i class="fa-solid fa-dollar-sign"></i></div>
+                                </div>
+                                <h3 class="fw-bold mb-1 text-dark" id="kpiRevenue">LKR 0</h3>
+                                <div class="mt-3 pt-3 border-top">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="small text-muted">8% Revenue:</span>
+                                        <span class="fw-bold text-primary" id="kpiCommission">LKR 0</span>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-primary w-100 mt-2 py-1 small fw-bold" id="btnCalcCommission">
+                                        <i class="fa-solid fa-calculator me-1"></i> Calculate 8%
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card p-4 border-start border-4" style="border-left-color: #10B981 !important;">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div class="text-muted small fw-bold text-uppercase">Total Trips</div>
+                                    <div class="bg-success bg-opacity-25 text-success rounded p-2"><i class="fa-solid fa-route"></i></div>
+                                </div>
+                                <h3 class="fw-bold mb-1 text-dark" id="kpiTrips">0</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card p-4 border-start border-4" style="border-left-color: #F59E0B !important;">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div class="text-muted small fw-bold text-uppercase">Active Drivers</div>
+                                    <div class="bg-warning bg-opacity-25 text-warning rounded p-2"><i class="fa-solid fa-car"></i></div>
+                                </div>
+                                <h3 class="fw-bold mb-1 text-dark" id="kpiDrivers">0</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card p-4 border-start border-4" style="border-left-color: #06B6D4 !important;">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div class="text-muted small fw-bold text-uppercase">Total Users</div>
+                                    <div class="bg-info bg-opacity-25 text-info rounded p-2"><i class="fa-solid fa-users"></i></div>
+                                </div>
+                                <h3 class="fw-bold mb-1 text-dark" id="kpiUsers">0</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="classic-card shadow-sm p-0 border overflow-hidden">
+                        <div class="p-4 border-bottom d-flex justify-content-between align-items-center bg-white">
+                            <h5 class="mb-0 fw-bold text-dark">Live Bookings Feed</h5>
+                        </div>
+                        <div class="table-responsive bg-white">
+                            <table class="table table-custom mb-0 align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Booking ID</th>
+                                        <th>Passenger</th>
+                                        <th>Driver</th>
+                                        <th>Route</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Fare</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bookingsFeedBody">
+                                    <tr><td colspan="6" class="text-center py-5">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `);
+
+                loadDashboardData();
+                refreshInterval = setInterval(loadDashboardData, 5000);
+            }
+
+            function loadDashboardData() {
+                // Fetch aggregate stats
+                $.get('/api/admin/stats', function (stats) {
+                    const rev = stats.totalRevenue || 0;
+                    const commission = rev * 0.08;
+                    $('#kpiRevenue').text('LKR ' + rev.toLocaleString());
+                    $('#kpiCommission').text('LKR ' + Math.round(commission).toLocaleString());
+                    $('#kpiTrips').text(stats.totalTrips || 0);
+                    $('#kpiDrivers').text(stats.activeDrivers || 0);
+                    $('#kpiUsers').text(stats.totalUsers || 0);
+                });
+
+                // Fetch live feed
+                $.get('/api/bookings/all', function (bookings) {
+                    const body = $('#bookingsFeedBody');
+                    if (body.length) body.empty();
+
+                    if (bookings.length === 0) {
+                        if (body.length) body.html('<tr><td colspan="6" class="text-center py-4 text-muted">No bookings found.</td></tr>');
+                    }
+
+                    // Sort by newest first (keep newest at top but use sequential IDs)
+                    bookings.sort((a, b) => b.bookingId - a.bookingId).slice(0, 10).forEach((b, i) => {
+                        const statusBadge = b.status === 'Completed' ? 'bg-success' : (b.status === 'Cancelled' ? 'bg-danger' : 'bg-warning text-dark');
+                        if (body.length) {
+                            body.append(`
+                                <tr>
+                                    <td><span class="fw-bold text-dark">#B${String(b.bookingId).padStart(3, '0')}</span></td>
+                                    <td>#P${String(b.passengerId).padStart(3, '0')}</td>
+                                    <td>${b.driverId ? '#D' + String(b.driverId).padStart(3, '0') : 'Unassigned'}</td>
+                                    <td class="small">${b.pickupLocation} -> ${b.dropoffLocation}</td>
+                                    <td><span class="badge ${statusBadge}">${b.status}</span></td>
+                                    <td class="text-end fw-bold">LKR ${(b.fare || 0).toLocaleString()}</td>
+                                </tr>
+                            `);
+                        }
+                    });
+                });
+            }
+
+            function showPassengers() {
+                clearInterval(refreshInterval);
+                $('.nav-link').removeClass('active');
+                $('#navPassengers').addClass('active');
+
+                $('#mainContent').html(`
+                    <div class="d-flex justify-content-between align-items-end mb-5">
+                        <div>
+                            <h2 class="fw-bold mb-1 text-dark">Passenger Management</h2>
+                            <p class="text-muted mb-0">List of all registered passengers on the platform.</p>
+                        </div>
+                    </div>
+
+                    <div class="classic-card shadow-sm p-0 border overflow-hidden">
+                        <div class="table-responsive bg-white">
+                            <table class="table table-custom mb-0 align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Passenger ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Mobile</th>
+                                        <th>Joined Date</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="passengersTableBody">
+                                    <tr><td colspan="6" class="text-center py-5">Loading passengers...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `);
+
+                loadPassengers();
+                refreshInterval = setInterval(loadPassengers, 5000);
+            }
+
+            function loadPassengers() {
+                $.get('/api/admin/passengers/all', function (passengers) {
+                    const body = $('#passengersTableBody');
+                    if (!body.length) return;
+                    body.empty();
+
+                    if (passengers.length === 0) {
+                        body.html('<tr><td colspan="6" class="text-center py-4 text-muted">No passengers found.</td></tr>');
+                    }
+
+                    passengers.forEach((p, i) => {
+                        body.append(`
+                            <tr>
+                                <td><span class="fw-bold text-dark">#P${String(p.userId).padStart(3, '0')}</span></td>
+                                <td>${p.name}</td>
+                                <td>${p.email}</td>
+                                <td>${p.mobile}</td>
+                                <td class="small">${p.createdAt ? p.createdAt.split('T')[0] : 'N/A'}</td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-outline-danger btn-delete-passenger" data-id="${p.userId}">
+                                        <i class="fa-solid fa-trash-can"></i> Remove
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                });
+            }
+
+            $(document).on('click', '.btn-delete-passenger', function () {
+                const id = $(this).data('id');
+                if (confirm('Are you sure you want to remove this passenger? This action cannot be undone.')) {
+                    const btn = $(this);
+                    btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin"></i>');
+
+                    $.ajax({
+                        url: '/api/admin/passengers/delete/' + id,
+                        type: 'DELETE',
+                        success: function () {
+                            loadPassengers();
+                        },
+                        error: function () {
+                            alert('Error removing passenger.');
+                            btn.prop('disabled', false).html('<i class="fa-solid fa-trash-can"></i> Remove');
+                        }
+                    });
+                }
+            });
+
+            function showDrivers() {
+                clearInterval(refreshInterval);
+                $('.nav-link').removeClass('active');
+                $('#navDrivers').addClass('active');
+
+                $('#mainContent').html(`
+                    <div class="d-flex justify-content-between align-items-end mb-5">
+                        <div>
+                            <h2 class="fw-bold mb-1 text-dark">Driver Management</h2>
+                            <p class="text-muted mb-0">Overview of all registered drivers.</p>
+                        </div>
+                    </div>
+
+                    <div class="classic-card shadow-sm p-0 border overflow-hidden">
+                        <div class="table-responsive bg-white">
+                            <table class="table table-custom mb-0 align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Driver ID</th>
+                                        <th>Name</th>
+                                        <th>Vehicle</th>
+                                        <th>Status</th>
+                                        <th>Total Trips</th>
+                                        <th>Rating</th>
+                                        <th>Total Amount</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="driversTableBody">
+                                    <tr><td colspan="7" class="text-center py-5">Loading drivers...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `);
+
+                loadDrivers();
+                refreshInterval = setInterval(loadDrivers, 5000);
+            }
+
+            function loadDrivers() {
+                $.get('/api/drivers/all', function (drivers) {
+                    const body = $('#driversTableBody');
+                    if (!body.length) return;
+                    body.empty();
+
+                    if (drivers.length === 0) {
+                        body.html('<tr><td colspan="8" class="text-center py-4 text-muted">No drivers found.</td></tr>');
+                    }
+
+                    drivers.forEach((d, i) => {
+                        const isOnline = d.status === 'Available' || d.status === 'OnTrip' || d.status === 'online';
+                        const statusLabel = isOnline ? 'Online' : 'Offline';
+                        const statusBadge = isOnline ? 'bg-success' : 'bg-secondary';
+
+                        const isPending = d.status === 'Pending Approval';
+
+                        body.append(`
+                                <tr>
+                                    <td><span class="fw-bold text-dark">#D${String(d.driverId).padStart(3, '0')}</span></td>
+                                    <td>${d.name}</td>
+                                    <td>${d.vehicleModel} (${d.vehiclePlate})</td>
+                                    <td><span class="badge ${statusBadge}">${statusLabel}</span></td>
+                                    <td>${d.totalTrips}</td>
+                                    <td><i class="fa-solid fa-star text-warning"></i> ${d.rating.toFixed(1)}</td>
+                                    <td class="fw-bold text-success">LKR ${(d.totalEarnings || 0).toLocaleString()}</td>
+                                <td class="text-end">
+                                    <div class="btn-group">
+                                        ${isPending ? `
+                                            <button class="btn btn-sm btn-success btn-approve-driver" data-id="${d.driverId}">
+                                                <i class="fa-solid fa-check"></i> Approve
+                                            </button>
+                                        ` : ''}
+                                        <button class="btn btn-sm btn-outline-danger btn-delete-driver" data-id="${d.driverId}">
+                                            <i class="fa-solid fa-trash-can"></i> Remove
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                });
+            }
+
+            $(document).on('click', '.btn-approve-driver', function () {
+                const id = $(this).data('id');
+                const btn = $(this);
+                btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin"></i>');
+
+                $.ajax({
+                    url: '/api/admin/drivers/approve/' + id,
+                    type: 'POST',
+                    success: function () {
+                        loadDrivers();
+                    },
+                    error: function () {
+                        alert('Error approving driver.');
+                        btn.prop('disabled', false).html('<i class="fa-solid fa-check"></i> Approve');
+                    }
+                });
+            });
+
+            $(document).on('click', '.btn-delete-driver', function () {
+                const id = $(this).data('id');
+                if (confirm('Are you sure you want to remove this driver?')) {
+                    $.ajax({
+                        url: '/api/admin/drivers/delete/' + id,
+                        type: 'DELETE',
+                        success: function () { loadDrivers(); },
+                        error: function () { alert('Error removing driver.'); }
+                    });
+                }
+            });
+
+            function showBookings() {
+                clearInterval(refreshInterval);
+                $('.nav-link').removeClass('active');
+                $('#navBookings').addClass('active');
+
+                $('#mainContent').html(`
+                    <div class="d-flex justify-content-between align-items-end mb-5">
+                        <div>
+                            <h2 class="fw-bold mb-1 text-dark">Booking Management</h2>
+                            <p class="text-muted mb-0">Full history of all ride requests and their current statuses.</p>
+                        </div>
+                    </div>
+
+                    <div class="classic-card shadow-sm p-0 border overflow-hidden">
+                        <div class="table-responsive bg-white">
+                            <table class="table table-custom mb-0 align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Booking ID</th>
+                                        <th>Passenger ID</th>
+                                        <th>Driver ID</th>
+                                        <th>Ride Type</th>
+                                        <th>Route</th>
+                                        <th>Status</th>
+                                        <th>Fare</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allBookingsTableBody">
+                                    <tr><td colspan="8" class="text-center py-5">Loading all bookings...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `);
+
+                loadAllBookings();
+                refreshInterval = setInterval(loadAllBookings, 5000);
+            }
+
+            function loadAllBookings() {
+                $.get('/api/bookings/all', function (bookings) {
+                    const body = $('#allBookingsTableBody');
+                    if (!body.length) return;
+                    body.empty();
+
+                    if (bookings.length === 0) {
+                        body.html('<tr><td colspan="8" class="text-center py-4 text-muted">No bookings found.</td></tr>');
+                        return;
+                    }
+
+                    bookings.forEach((b, i) => {
+                        const statusBadge = b.status === 'Completed' ? 'bg-success' : (b.status === 'Cancelled' ? 'bg-danger' : 'bg-warning text-dark');
+                        const dateStr = b.createdAt ? b.createdAt.replace('T', ' ').split('.')[0] : 'N/A';
+
+                        body.append(`
+                            <tr>
+                                <td><span class="fw-bold text-dark">#B${String(b.bookingId).padStart(3, '0')}</span></td>
+                                <td>#P${String(b.passengerId).padStart(3, '0')}</td>
+                                <td>${b.driverId ? '#D' + String(b.driverId).padStart(3, '0') : '<span class="text-muted">Unassigned</span>'}</td>
+                                <td><span class="badge bg-light text-dark border">${b.rideType || 'Standard'}</span></td>
+                                <td class="small">${b.pickupLocation} <i class="fa-solid fa-arrow-right mx-1 text-muted"></i> ${b.dropoffLocation}</td>
+                                <td><span class="badge ${statusBadge}">${b.status}</span></td>
+                                <td class="fw-bold">LKR ${(b.fare || 0).toLocaleString()}</td>
+                                <td class="small text-muted">${dateStr}</td>
+                            </tr>
+                        `);
+                    });
+                });
+            }
+
+            // Setup Navigation
+            $('#navDashboard').click(function (e) { e.preventDefault(); showDashboard(); });
+            $('#navDrivers').click(function (e) { e.preventDefault(); showDrivers(); });
+            $('#navPassengers').click(function (e) { e.preventDefault(); showPassengers(); });
+            $('#navBookings').click(function (e) { e.preventDefault(); showBookings(); });
+
+            // Commission Button Click Handler
+            $(document).on('click', '#btnCalcCommission', function() {
+                const revText = $('#kpiRevenue').text().replace(/[^\d]/g, '');
+                const rev = parseFloat(revText) || 0;
+                const comm = Math.round(rev * 0.08);
+                alert(`Platform Revenue (8%): LKR ${comm.toLocaleString()}\n\nThis is the 8% commission calculated from the total revenue of LKR ${rev.toLocaleString()}.`);
+            });
+
+            // Initialize
+            showDashboard();
+        });
+    </script>
+</body>
+
+</html>

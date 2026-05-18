@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Ride | UrbanRide</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .split-screen { display: flex; height: 100vh; overflow: hidden; }
+        .map-side { flex: 1.5; position: relative; }
+        .form-side { flex: 1; display: flex; flex-direction: column; background-color: var(--white); overflow-y: auto; padding: 2rem; position: relative; z-index: 10; box-shadow: -10px 0 30px rgba(0,0,0,0.1); border-left: 1px solid #E5E7EB; }
+        iframe { filter: none; width: 100%; height: 100%; border: 0; }
+        .vehicle-option { background: var(--white); border: 2px solid transparent; border-radius: 12px; cursor: pointer; transition: all 0.3s; padding: 1.2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .vehicle-option:hover { background: var(--light); transform: translateY(-3px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .vehicle-option.selected { border-color: var(--primary); background: #FEF3C7; box-shadow: 0 4px 10px rgba(250,204,21,0.2); }
+        .pulse-dot { width: 15px; height: 15px; background: var(--primary); border-radius: 50%; display: inline-block; box-shadow: 0 0 0 0 rgba(250,204,21,0.7); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(250,204,21,0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(250,204,21,0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(250,204,21,0); } }
+        
+        @media (max-width: 992px) {
+            .split-screen { flex-direction: column; }
+            .map-side { flex: 1; }
+            .form-side { flex: unset; height: 60vh; border-top-left-radius: 24px; border-top-right-radius: 24px; margin-top: -20px; }
+        }
+    </style>
+</head>
+<body class="p-0 m-0">
+
+    <div class="split-screen w-100">
+        <!-- Map Side -->
+        <div class="map-side">
+            <div class="position-absolute top-0 start-0 p-4 z-1 d-flex gap-3">
+                <a href="profile.html" class="btn btn-white shadow-sm border rounded-circle bg-white" style="width: 50px; height: 50px; line-height: 35px;"><i class="fa-solid fa-arrow-left text-dark"></i></a>
+                <button id="logoutBtn" class="btn btn-white shadow-sm border rounded-circle bg-white" style="width: 50px; height: 50px; line-height: 35px;"><i class="fa-solid fa-power-off text-danger"></i></button>
+            </div>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126743.58585966601!2d79.77380313175114!3d6.921838634863953!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo%2C%20Sri%20Lanka!5e0!3m2!1sen!2sus!4v1714890283021!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <!-- Form Side -->
+        <div class="form-side">
+            <h2 class="fw-bold mb-4 text-dark">Where to?</h2>
+            
+            <!-- Clean Location Inputs -->
+            <div class="mb-4">
+                <div class="bg-light p-3 rounded-4 border mb-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fa-solid fa-circle text-primary me-4 small"></i>
+                        <div class="flex-grow-1">
+                            <label class="small fw-bold text-muted d-block mb-2">PICKUP LOCATION</label>
+                            <select class="form-select border-0 bg-transparent ps-1 fw-bold fs-5 shadow-none" id="pickup">
+                                <option value="" disabled selected>Select pickup</option>
+                                <option value="Malabe">Malabe</option>
+                                <option value="Colombo Fort">Colombo Fort</option>
+                                <option value="Port City">Port City</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-light p-3 rounded-4 border">
+                    <div class="d-flex align-items-center">
+                        <i class="fa-solid fa-location-dot text-danger me-4 fs-5"></i>
+                        <div class="flex-grow-1">
+                            <label class="small fw-bold text-muted d-block mb-2">DESTINATION</label>
+                            <select class="form-select border-0 bg-transparent ps-1 fw-bold fs-5 shadow-none" id="destination">
+                                <option value="" disabled selected>Where to?</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h5 class="fw-bold mb-3 text-dark">Select Vehicle</h5>
+            
+            <!-- Vehicle Options -->
+            <div class="d-flex flex-column gap-3 mb-4">
+                <div class="vehicle-option selected d-flex justify-content-between align-items-center" data-type="Bike" data-base="200" data-rate="50">
+                    <div class="d-flex align-items-center">
+                        <img src="https://img.icons8.com/color/96/000000/motorcycle.png" width="60" alt="Bike" class="me-3 drop-shadow">
+                        <div>
+                            <h5 class="mb-0 fw-bold text-dark">Bike</h5>
+                            <small class="text-muted">Quick & affordable</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <h5 class="mb-0 fw-bold text-dark" id="price-Bike">LKR 0</h5>
+                        <small class="text-muted" id="time-Bike">--</small>
+                    </div>
+                </div>
+
+                <div class="vehicle-option d-flex justify-content-between align-items-center" data-type="Three-Wheel" data-base="350" data-rate="80">
+                    <div class="d-flex align-items-center">
+                        <img src="https://img.icons8.com/color/96/000000/auto-rickshaw.png" width="60" alt="Three-Wheel" class="me-3 drop-shadow">
+                        <div>
+                            <h5 class="mb-0 fw-bold text-dark">Three-Wheel</h5>
+                            <small class="text-muted">Everyday local travel</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <h5 class="mb-0 fw-bold text-dark" id="price-Three-Wheel">LKR 0</h5>
+                        <small class="text-muted" id="time-Three-Wheel">--</small>
+                    </div>
+                </div>
+
+                <div class="vehicle-option d-flex justify-content-between align-items-center" data-type="Car" data-base="500" data-rate="150">
+                    <div class="d-flex align-items-center">
+                        <img src="https://img.icons8.com/color/96/000000/sedan.png" width="60" alt="Car" class="me-3 drop-shadow">
+                        <div>
+                            <h5 class="mb-0 fw-bold text-dark">Car</h5>
+                            <small class="text-primary"><i class="fa-solid fa-star me-1"></i>Comfortable</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <h5 class="mb-0 fw-bold text-dark" id="price-Car">LKR 0</h5>
+                        <small class="text-muted" id="time-Car">--</small>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary btn-lg w-100 py-3 shadow-sm mt-auto fw-bold text-dark" id="confirmBookingBtn">Request <span id="btnVehicleText">Bike</span> <i class="fa-solid fa-arrow-right ms-2"></i></button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // --- SESSION VALIDATION ---
+        const userId = localStorage.getItem('urbanride_userId');
+        const userRole = localStorage.getItem('urbanride_role');
+        
+        if (!userId) {
+            window.location.href = 'login.html';
+        } else if (userRole !== 'passenger') {
+            window.location.href = 'login.html';
+        }
+
+        $('#logoutBtn').click(function() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        });
+
+        const distanceMatrix = {
+            "Malabe": {
+                "Malabe": 0, "Athurugiriya": 5, "Nugegoda": 10, "Kadawatha": 12, "Kelaniya": 12, "Colombo Fort": 15, 
+                "Port City": 16, "Seeduwa": 30, "Katunayaka": 35, "Negombo": 40
+            },
+            "Colombo Fort": {
+                "Colombo Fort": 0, "Port City": 2, "Nugegoda": 8, "Kelaniya": 8, "Malabe": 15, "Kadawatha": 18, 
+                "Athurugiriya": 20, "Seeduwa": 28, "Katunayaka": 32, "Negombo": 38
+            },
+            "Port City": {
+                "Port City": 0, "Colombo Fort": 2, "Nugegoda": 9, "Kelaniya": 9, "Malabe": 16, "Kadawatha": 19, 
+                "Athurugiriya": 21, "Seeduwa": 29, "Katunayaka": 33, "Negombo": 39
+            }
+        };
+
+        let selectedType = 'Bike';
+        let currentDist = 0;
+        
+        function populateDestinations() {
+            const pickup = $('#pickup').val();
+            const destSelect = $('#destination');
+            destSelect.empty().append('<option value="" disabled selected>Where to?</option>');
+            
+            const userOrder = [
+                "Colombo Fort", "Malabe", "Kadawatha", "Port City", "Nugegoda", 
+                "Athurugiriya", "Kelaniya", "Katunayaka", "Seeduwa", "Negombo"
+            ];
+
+            if (pickup) {
+                userOrder.forEach(name => {
+                    destSelect.append(`<option value="${name}">${name}</option>`);
+                });
+            }
+        }
+
+        function updateEstimates() {
+            const pickup = $('#pickup').val();
+            const destination = $('#destination').val();
+            
+            if (pickup && destination) {
+                if (pickup === destination) {
+                    $('#price-Bike, #price-Three-Wheel, #price-Car').text('LKR 0');
+                    $('#time-Bike, #time-Three-Wheel, #time-Car').text('0 min');
+                    currentDist = 0;
+                    return;
+                }
+
+                if (distanceMatrix[pickup] && distanceMatrix[pickup][destination] !== undefined) {
+                    currentDist = distanceMatrix[pickup][destination];
+                    
+                    // Bike: 40 per km + 100 base
+                    const bikePrice = Math.round(100 + (currentDist * 40));
+                    $('#price-Bike').text(`LKR ${bikePrice}`);
+                    $('#time-Bike').text(`~ ${Math.round(currentDist * 1.5)} min`);
+
+                    // Three-Wheel: 70 per km + 150 base
+                    const tukPrice = Math.round(150 + (currentDist * 70));
+                    $('#price-Three-Wheel').text(`LKR ${tukPrice}`);
+                    $('#time-Three-Wheel').text(`~ ${Math.round(currentDist * 2)} min`);
+
+                    // Car: 120 per km + 300 base
+                    const carPrice = Math.round(300 + (currentDist * 120));
+                    $('#price-Car').text(`LKR ${carPrice.toLocaleString()}`);
+                    $('#time-Car').text(`~ ${Math.round(currentDist * 1.8)} min`);
+                }
+            } else {
+                $('#price-Bike, #price-Three-Wheel, #price-Car').text('LKR 0');
+                $('#time-Bike, #time-Three-Wheel, #time-Car').text('--');
+            }
+        }
+
+        $('#pickup').on('change', function() {
+            populateDestinations();
+            updateEstimates();
+        });
+
+        $('#destination').on('change', updateEstimates);
+
+
+        $('.vehicle-option').click(function() {
+            $('.vehicle-option').removeClass('selected');
+            $(this).addClass('selected');
+            selectedType = $(this).data('type');
+            $('#btnVehicleText').text(selectedType);
+        });
+
+        $('#confirmBookingBtn').click(function() {
+            const pickup = $('#pickup').val();
+            const destination = $('#destination').val();
+            const priceText = $(`#price-${selectedType}`).text();
+            const fare = parseFloat(priceText.replace(/[^\d]/g, ''));
+            
+            if(!pickup || !destination) {
+                alert("Please enter both pickup and destination locations.");
+                return;
+            }
+
+            if (fare <= 0) {
+                alert("Pickup and destination cannot be the same.");
+                return;
+            }
+
+            $(this).html('<i class="fa-solid fa-spinner fa-spin"></i> Finding nearby drivers...');
+            
+            // 🚀 CREATE REAL BOOKING IN BACKEND
+            const bookingData = {
+                passengerId: parseInt(userId),
+                pickupLocation: pickup,
+                dropoffLocation: destination,
+                fare: fare,
+                rideType: selectedType
+            };
+
+            $.ajax({
+                url: '/api/bookings/create',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(bookingData),
+                success: function(res) {
+                    // Save fare and distance for tracking page
+                    localStorage.setItem('last_fare', priceText);
+                    localStorage.setItem('last_dist', currentDist);
+                    localStorage.setItem('last_pickup', pickup);
+                    localStorage.setItem('last_destination', destination);
+
+                    setTimeout(() => {
+                        window.location.href = `track-trip.html?id=${res.bookingId}&type=${selectedType}`;
+                    }, 1500);
+                },
+                error: function() {
+                    alert("Failed to connect to server. Check if backend is running.");
+                    $('#confirmBookingBtn').html('Request ' + selectedType + ' <i class="fa-solid fa-arrow-right ms-2"></i>');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
