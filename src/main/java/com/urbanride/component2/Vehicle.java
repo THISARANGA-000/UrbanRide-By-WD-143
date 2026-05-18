@@ -1,7 +1,6 @@
 package com.urbanride.component2;
 
 public abstract class Vehicle {
-    
     private int vehicleId;
     private String plateNo;
     private String model;
