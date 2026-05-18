@@ -1,13 +1,12 @@
 package com.urbanride.component1;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import jakarta.persistence.*; // JPA anotation for  import
+import java.time.LocalDateTime; //real time / data  use
 
 @MappedSuperclass
 public abstract class User {
 
-    // ID is defined in subclasses (Passenger, Driver, Admin) 
-    // to allow for independent sequence generators.
+    // ID is defined in subclasses (Passenger, Driver, Admin)
 
     @Column(nullable = false)
     private String name;
@@ -53,7 +52,7 @@ public abstract class User {
     public abstract boolean login(String email, String password);
     public abstract void displayProfile();
 
-    /** Simple hash for OOP demo â€” not production-grade */
+    // this use only simple project
     public static String hashPassword(String password) {
         return Integer.toHexString(password.hashCode());
     }
